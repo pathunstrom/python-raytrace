@@ -1,6 +1,8 @@
+from math import isclose, sqrt
+
 from pytest import mark
 
-from src.tracer import Tuple, ZERO_VECTOR
+from tracer import Tuple, ZERO_VECTOR, EPSILON
 
 
 @mark.parametrize(
@@ -94,3 +96,56 @@ def test_tuple_subtraction_from_zero_vector():
 def test_tuple_negation():
     a = Tuple(1, -2, 3, -4)
     assert -a == Tuple(-1, 2, -3, 4)
+
+
+@mark.parametrize(
+    "inputs, scalar, expected_values",
+    (
+        ((1, -2, 3, -4), 3.5, (3.5, -7, 10.5, -14)),
+        ((1, -2, 3, -4), 0.5, (0.5, -1, 1.5, -2))
+    )
+)
+def test_tuple_multiply_scalars(inputs, scalar, expected_values):
+    assert Tuple(*inputs) * scalar == Tuple(*expected_values)
+
+
+def test_tuple_divide_scalars():
+    assert Tuple(1, -2, 3, -4) / 2 == Tuple(0.5, -1, 1.5, -2)
+
+
+@mark.parametrize(
+    "inputs, expected",
+    (
+        ((1, 0, 0), 1),
+        ((0, 1, 0), 1),
+        ((0, 0, 1), 1),
+        ((1, 2, 3), sqrt(14)),
+        ((-1, -2, -3), sqrt(14))
+    )
+)
+def test_tuple_magnitude(inputs, expected):
+    assert isclose(Tuple.vector(*inputs).magnitude, expected, abs_tol=EPSILON)
+
+
+@mark.parametrize(
+    "input, expected",
+    (
+        ((4, 0, 0), (1, 0, 0)),
+        ((1, 2, 3), (0.26726, 0.53452, 0.80178)),
+    )
+)
+def test_tuple_normalize(input, expected):
+    normalized = Tuple.vector(*input).normalize()
+    assert normalized == Tuple.vector(*expected)
+    assert isclose(normalized.magnitude, 1, abs_tol=EPSILON)
+
+
+def test_tuple_dot_product():
+    assert Tuple.vector(1, 2, 3).dot(Tuple.vector(2, 3, 4)) == 20
+
+
+def test_tuple_cross_product():
+    a = Tuple.vector(1, 2, 3)
+    b = Tuple.vector(2, 3, 4)
+    assert a.cross(b) == Tuple.vector(-1, 2, -1)
+    assert b.cross(a) == Tuple.vector(1, -2, 1)

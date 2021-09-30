@@ -1,9 +1,44 @@
 from __future__ import annotations
 
+from functools import wraps, singledispatchmethod
 from math import isclose, sqrt
 from typing import Union, NamedTuple
 
 from tracer.constants import EPSILON
+
+
+def length_protection(function):
+
+    @wraps(function)
+    def wrapper(left, right):
+        if len(left) != len(right):
+            raise ValueError(f"May only {function.__name__} tuples of the same length.")
+        return function(left, right)
+    return wrapper
+
+
+@length_protection
+def add(self, other):
+    return type(self)(*(left + right for left, right in zip(self, other)))
+
+
+@length_protection
+def subtract(self, other):
+    return type(self)(*(left - right for left, right in zip(self, other)))
+
+
+@length_protection
+def compare_equality(self, other):
+    return all(isclose(left, right, abs_tol=EPSILON) for left, right in zip(self, other))
+
+
+def scalar_multiplication(self, scalar):
+    return type(self)(*(val * scalar for val in self))
+
+
+@length_protection
+def hadamard_product(self, other):
+    return type(self)(*(left * right for left, right in zip(self, other)))
 
 
 class Tuple(NamedTuple):
@@ -50,22 +85,46 @@ class Tuple(NamedTuple):
         return cls(x, y, z, 0)
 
     def __add__(self, other):
-        return type(self)(*(left + right for left, right in zip(self, other)))
+        return add(self, other)
 
     def __eq__(self, other):
-        return all(isclose(left, right, abs_tol=EPSILON) for left, right in zip(self, other))
+        return compare_equality(self, other)
 
     def __mul__(self, scalar):
-        return type(self)(*(val * scalar for val in self))
+        return scalar_multiplication(self, scalar)
 
     def __neg__(self):
         return type(self)(*(-x for x in self))
 
     def __sub__(self, other):
-        return type(self)(*(left - right for left, right in zip(self, other)))
+        return subtract(self, other)
 
     def __truediv__(self, scalar):
         return type(self)(*(val / scalar for val in self))
+
+
+class Color(NamedTuple):
+    red: Union[float, int]
+    green: Union[float, int]
+    blue: Union[float, int]
+
+    def __add__(self, other):
+        return add(self, other)
+
+    def __eq__(self, other):
+        return compare_equality(self, other)
+
+    def __sub__(self, other):
+        return subtract(self, other)
+
+    @singledispatchmethod
+    def __mul__(self, other):
+        return hadamard_product(self, other)
+
+    @__mul__.register(int)
+    @__mul__.register(float)
+    def _(self, scalar):
+        return scalar_multiplication(self, scalar)
 
 
 ZERO_VECTOR = Tuple(0, 0, 0, 0)

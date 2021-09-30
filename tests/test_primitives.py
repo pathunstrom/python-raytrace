@@ -1,8 +1,8 @@
 from math import isclose, sqrt
 
-from pytest import mark
+from pytest import mark, raises
 
-from tracer import Tuple, ZERO_VECTOR, EPSILON
+from tracer import Tuple, Color, ZERO_VECTOR, EPSILON
 
 
 @mark.parametrize(
@@ -149,3 +149,42 @@ def test_tuple_cross_product():
     b = Tuple.vector(2, 3, 4)
     assert a.cross(b) == Tuple.vector(-1, 2, -1)
     assert b.cross(a) == Tuple.vector(1, -2, 1)
+
+
+def test_cant_add_color_to_tuple():
+    with raises(ValueError):
+        value = Color(1, 1, 1) + Tuple(2, 3, 4, 5)
+
+
+def test_cant_subtract_color_from_tuple():
+    with raises(ValueError):
+        value = Color(1, 1, 1) - Tuple(2, 3, 4, 5)
+
+
+def test_cant_compare_color_and_tuple():
+    with raises(ValueError):
+        assert Color(1, 1, 1) == Tuple(2, 3, 4, 5)
+
+
+def test_color():
+    c = Color(-0.5, 0.4, 1.7)
+    assert c.red == -0.5
+    assert c.green == 0.4
+    assert c.blue == 1.7
+
+
+def test_color_add():
+    assert Color(0.9, 0.6, 0.75) + Color(0.7, 0.1, 0.25) == Color(1.6, 0.7, 1.0)
+
+
+def test_color_subtract():
+    assert Color(0.9, 0.6, 0.75) - Color(0.7, 0.1, 0.25) == Color(0.2, 0.5, 0.5)
+
+
+def test_color_multiply_by_scalar():
+    assert Color(0.2, 0.3, 0.4) * 2 == Color(0.4, 0.6, 0.8)
+    assert Color(0.2, 0.3, 0.4) * 0.5 == Color(0.1, 0.15, 0.2)
+
+
+def test_color_multiply_by_color():
+    assert Color(1, 0.2, 0.4) * Color(0.9, 1, 0.1) == Color(0.9, 0.2, 0.04)

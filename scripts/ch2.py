@@ -5,6 +5,7 @@ from typing import Union
 
 from tracer import Tuple, Canvas, Color
 
+
 number = Union[float, int]
 vector_tuple = tuple[number, number, number]
 

@@ -1,4 +1,7 @@
 from collections import UserList
+from math import isclose
+
+from .constants import EPSILON
 
 
 class Matrix(UserList):
@@ -17,3 +20,11 @@ class Matrix(UserList):
     def __getitem__(self, item):
         y, x = item
         return super().__getitem__(x + (y * self.size))
+
+    def __eq__(self, other):
+        if len(self) != len(other):
+            return False
+        return all(isclose(l, r, abs_tol=EPSILON) for l, r in zip(self, other))
+
+    def __iter__(self):
+        yield from self.data

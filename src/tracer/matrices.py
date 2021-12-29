@@ -92,6 +92,9 @@ class Matrix(UserList):
     def minor(self, row, column):
         return self.submatrix(row, column).determinant()
 
+    def cofactor(self, row, column):
+        return self.minor(row, column) * [1, -1][(row + column) % 2]
+
 
 Matrix.identity = Matrix(
     1, 0, 0, 0,

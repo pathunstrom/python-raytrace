@@ -196,3 +196,16 @@ def test_matrix_minor_3_by_3():
 
     assert matrix.submatrix(1, 0).determinant() == 25
     assert matrix.minor(1, 0) == 25
+
+
+def test_matix_cofactor_3_by_3():
+    matrix = Matrix(
+        3, 5, 0,
+        2, -1, -7,
+        6, -1, 5
+    )
+
+    assert matrix.minor(0, 0) == -12
+    assert matrix.cofactor(0, 0) == -12
+    assert matrix.minor(1, 0) == 25
+    assert matrix.cofactor(1, 0) == -25

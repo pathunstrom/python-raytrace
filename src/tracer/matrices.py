@@ -69,8 +69,10 @@ class Matrix(UserList):
         return Matrix(*chain(*self.columns))
 
     def determinant(self):
-        a, b, c, d = self.data
-        return a * d - b * c
+        if self.size == 2:
+            a, b, c, d = self.data
+            return a * d - b * c
+        return sum(v * self.cofactor(0, y) for y, v in enumerate(self.row(0)))
 
     def submatrix(self, row_index, column_index):
         return Matrix(

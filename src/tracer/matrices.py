@@ -23,6 +23,7 @@ class Matrix(UserList):
         if not len(self) in self._size_map.keys():
             raise ValueError("Only supports square matrices.")
         self.size = self._size_map[len(self)]
+        self._invertible = None
 
     def __getitem__(self, item):
         y, x = item
@@ -96,6 +97,21 @@ class Matrix(UserList):
 
     def cofactor(self, row, column):
         return self.minor(row, column) * [1, -1][(row + column) % 2]
+
+    @property
+    def invertible(self):
+        if self._invertible is None:
+            self._invertible = bool(self.determinant())
+        return self._invertible
+
+    def inverse(self):
+        cofactor_matrix = Matrix(*(
+            self.cofactor(row, column)
+            for row, column
+            in product(range(self.size), range(self.size))
+        ))
+        determinate = self.determinant()
+        return Matrix(*(v / determinate for v in cofactor_matrix.transpose()))
 
 
 Matrix.identity = Matrix(

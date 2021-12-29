@@ -114,3 +114,14 @@ def test_matrix_by_tuple():
     _tuple = Tuple(1, 2, 3, 1)
 
     assert matrix * _tuple == Tuple(18, 24, 33, 1)
+
+
+def test_matrix_multiplication_identity():
+    matrix = Matrix(
+        0, 1, 2, 4,
+        1, 2, 4, 8,
+        2, 4, 8, 16,
+        4, 8, 16, 32
+    )
+
+    assert matrix @ Matrix.identity == matrix

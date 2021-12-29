@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from collections import UserList
 from itertools import product
 from math import isclose
@@ -13,6 +15,8 @@ class Matrix(UserList):
         9: 3,
         16: 4
     }
+
+    identity: Matrix
 
     def __init__(self, *items):
         super().__init__(items)
@@ -55,3 +59,11 @@ class Matrix(UserList):
     def column(self, column):
         for x in range(self.size):
             yield self[x, column]
+
+
+Matrix.identity = Matrix(
+    1, 0, 0, 0,
+    0, 1, 0, 0,
+    0, 0, 1, 0,
+    0, 0, 0, 1
+)

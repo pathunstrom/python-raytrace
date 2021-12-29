@@ -1,4 +1,4 @@
-from tracer import Matrix
+from tracer import Matrix, Tuple
 
 
 def test_matrix_4x4():
@@ -101,3 +101,16 @@ def test_matrix_multiplication():
     )
 
     assert left_matrix @ right_matrix == expected
+
+
+def test_matrix_by_tuple():
+    matrix = Matrix(
+        1, 2, 3, 4,
+        2, 4, 4, 2,
+        8, 6, 4, 1,
+        0, 0, 0, 1
+    )
+
+    _tuple = Tuple(1, 2, 3, 1)
+
+    assert matrix * _tuple == Tuple(18, 24, 33, 1)

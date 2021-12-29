@@ -3,9 +3,11 @@ from itertools import product
 from math import isclose
 
 from .constants import EPSILON
+from .tuples import Tuple
 
 
 class Matrix(UserList):
+
     _size_map = {
         4: 2,
         9: 3,
@@ -37,6 +39,14 @@ class Matrix(UserList):
         for x, y in product(range(self.size), range(self.size)):
             values.append(sum(v1 * v2 for v1, v2 in zip(self.row(x), other.column(y))))
         return Matrix(*values)
+
+    def __mul__(self, _tuple: Tuple):
+        return Tuple(*(_tuple.dot(row) for row in self.rows))
+
+    @property
+    def rows(self):
+        for y in range(self.size):
+            yield [*self.row(y)]
 
     def row(self, row):
         for y in range(self.size):

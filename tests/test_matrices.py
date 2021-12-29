@@ -144,3 +144,12 @@ def test_matrix_transpose():
 
     assert matrix.transpose() == expected
     assert Matrix.identity.transpose() == Matrix.identity
+
+
+def test_2_by_2_determinant():
+    matrix = Matrix(
+        1, 5,
+        -3, 2
+    )
+
+    assert matrix.determinant() == 17

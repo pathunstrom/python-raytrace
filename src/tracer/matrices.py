@@ -68,6 +68,10 @@ class Matrix(UserList):
     def transpose(self) -> Matrix:
         return Matrix(*chain(*self.columns))
 
+    def determinant(self):
+        a, b, c, d = self.data
+        return a * d - b * c
+
 
 Matrix.identity = Matrix(
     1, 0, 0, 0,

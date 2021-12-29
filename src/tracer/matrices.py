@@ -72,6 +72,23 @@ class Matrix(UserList):
         a, b, c, d = self.data
         return a * d - b * c
 
+    def submatrix(self, row_index, column_index):
+        return Matrix(
+            *chain(
+                *(
+                    (
+                        v
+                        for i, v
+                        in enumerate(row)
+                        if i != column_index
+                    )
+                    for j, row
+                    in enumerate(self.rows)
+                    if j != row_index
+                )
+            )
+        )
+
 
 Matrix.identity = Matrix(
     1, 0, 0, 0,

@@ -153,3 +153,35 @@ def test_2_by_2_determinant():
     )
 
     assert matrix.determinant() == 17
+
+
+def test_submatrix_3_by_3():
+    matrix = Matrix(
+        1, 5, 0,
+        -3, 2, 7,
+        0, 6, -3
+    )
+
+    expected = Matrix(
+        -3, 2,
+        0, 6
+    )
+
+    assert matrix.submatrix(0, 2) == expected
+
+
+def test_submatrix_4_by_4():
+    matrix = Matrix(
+        -6, 1, 1, 6,
+        -8, 5, 8, 6,
+        -1, 0, 8, 2,
+        -7, 1, -1, 1
+    )
+
+    expected = Matrix(
+        -6, 1, 6,
+        -8, 8, 6,
+        -7, -1, 1
+    )
+
+    assert matrix.submatrix(2, 1) == expected

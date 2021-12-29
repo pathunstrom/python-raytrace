@@ -125,3 +125,22 @@ def test_matrix_multiplication_identity():
     )
 
     assert matrix @ Matrix.identity == matrix
+
+
+def test_matrix_transpose():
+    matrix = Matrix(
+        0, 9, 3, 0,
+        9, 8, 0, 8,
+        1, 8, 5, 3,
+        0, 0, 5, 8
+    )
+
+    expected = Matrix(
+        0, 9, 1, 0,
+        9, 8, 8, 0,
+        3, 0, 5, 5,
+        0, 8, 3, 8
+    )
+
+    assert matrix.transpose() == expected
+    assert Matrix.identity.transpose() == Matrix.identity

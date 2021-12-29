@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections import UserList
-from itertools import product
+from itertools import chain, product
 from math import isclose
 
 from .constants import EPSILON
@@ -49,16 +49,24 @@ class Matrix(UserList):
 
     @property
     def rows(self):
-        for y in range(self.size):
-            yield [*self.row(y)]
+        for x in range(self.size):
+            yield [*self.row(x)]
 
     def row(self, row):
         for y in range(self.size):
             yield self[row, y]
 
+    @property
+    def columns(self):
+        for y in range(self.size):
+            yield [*self.column(y)]
+
     def column(self, column):
         for x in range(self.size):
             yield self[x, column]
+
+    def transpose(self) -> Matrix:
+        return Matrix(*chain(*self.columns))
 
 
 Matrix.identity = Matrix(

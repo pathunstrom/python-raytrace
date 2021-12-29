@@ -89,6 +89,9 @@ class Matrix(UserList):
             )
         )
 
+    def minor(self, row, column):
+        return self.submatrix(row, column).determinant()
+
 
 Matrix.identity = Matrix(
     1, 0, 0, 0,

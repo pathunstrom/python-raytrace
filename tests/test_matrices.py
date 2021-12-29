@@ -185,3 +185,14 @@ def test_submatrix_4_by_4():
     )
 
     assert matrix.submatrix(2, 1) == expected
+
+
+def test_matrix_minor_3_by_3():
+    matrix = Matrix(
+        3, 5, 0,
+        2, -1, -7,
+        6, -1, 5
+    )
+
+    assert matrix.submatrix(1, 0).determinant() == 25
+    assert matrix.minor(1, 0) == 25

@@ -31,3 +31,10 @@ def test_scaling():
     assert transform * point == Tuple.point(-8, 18, 32)
     assert inverse * point == Tuple.point(-2, 2, 2)
     assert transform * vector == Tuple.vector(-8, 18, 32)
+
+
+def test_reflection():
+    transform = transforms.scaling(-1, 1, 1)
+    point = Tuple.point(2, 3, 4)
+
+    assert transform * point == Tuple.point(-2, 3, 4)

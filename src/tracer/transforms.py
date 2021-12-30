@@ -33,3 +33,12 @@ def rotation_x(radians: number) -> Matrix:
         0, sin(radians), cos(radians), 0,
         0, 0, 0, 1
     )
+
+
+def rotation_y(radians: number) -> Matrix:
+    return Matrix(
+        cos(radians), 0, sin(radians), 0,
+        0, 1, 0, 0,
+        -sin(radians), 0, cos(radians), 0,
+        0, 0, 0, 1
+    )

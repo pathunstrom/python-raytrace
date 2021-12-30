@@ -49,3 +49,19 @@ def test_rotation_x():
 
     assert half_quarter * point == Tuple.point(0, sqrt(2)/2, sqrt(2)/2)
     assert full_quarter * point == Tuple.point(0, 0, 1)
+
+
+def test_rotation_x_inverse():
+    point = Tuple.point(0, 1, 0)
+    transform = transforms.rotation_x(pi / 4).inverse()
+
+    assert transform * point == Tuple.point(0, sqrt(2) / 2, -sqrt(2) / 2)
+
+
+def test_rotation_y():
+    point = Tuple.point(0, 0, 1)
+    half_quarter = transforms.rotation_y(pi / 4)
+    full_quarter = transforms.rotation_y(pi / 2)
+
+    assert half_quarter * point == Tuple.point(sqrt(2)/2, 0, sqrt(2)/2)
+    assert full_quarter * point == Tuple.point(1, 0, 0)

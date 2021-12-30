@@ -20,3 +20,14 @@ def test_translation_no_effect_on_vectors():
     vector = Tuple.vector(-3, 4, 5)
 
     assert transform * vector == vector
+
+
+def test_scaling():
+    transform = transforms.scaling(2, 3, 4)
+    point = Tuple.point(-4, 6, 8)
+    vector = Tuple.vector(-4, 6, 8)
+    inverse = transform.inverse()
+
+    assert transform * point == Tuple.point(-8, 18, 32)
+    assert inverse * point == Tuple.point(-2, 2, 2)
+    assert transform * vector == Tuple.vector(-8, 18, 32)

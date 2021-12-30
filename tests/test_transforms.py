@@ -3,6 +3,8 @@ Test tracer transforms.
 
 Transforms are helper methods for creating Matrix objects.
 """
+from math import pi, sqrt
+
 from tracer import transforms, Tuple
 
 
@@ -38,3 +40,12 @@ def test_reflection():
     point = Tuple.point(2, 3, 4)
 
     assert transform * point == Tuple.point(-2, 3, 4)
+
+
+def test_rotation_x():
+    point = Tuple.point(0, 1, 0)
+    half_quarter = transforms.rotation_x(pi / 4)
+    full_quarter = transforms.rotation_x(pi / 2)
+
+    assert half_quarter * point == Tuple.point(0, sqrt(2)/2, sqrt(2)/2)
+    assert full_quarter * point == Tuple.point(0, 0, 1)

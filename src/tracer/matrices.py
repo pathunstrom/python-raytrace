@@ -2,10 +2,14 @@ from __future__ import annotations
 
 from collections import UserList
 from itertools import chain, product
-from math import isclose
+from math import isclose, cos, sin
+from types import SimpleNamespace
+from typing import Union
 
 from .constants import EPSILON
 from .tuples import Tuple
+
+number = Union[float, int]
 
 
 class Matrix(UserList):
@@ -120,3 +124,67 @@ Matrix.identity = Matrix(
     0, 0, 1, 0,
     0, 0, 0, 1
 )
+
+transforms = SimpleNamespace()
+
+
+def translation(x: number, y: number, z: number) -> Matrix:
+    return Matrix(
+        1, 0, 0, x,
+        0, 1, 0, y,
+        0, 0, 1, z,
+        0, 0, 0, 1
+    )
+
+
+def scaling(x: number, y: number, z: number) -> Matrix:
+    return Matrix(
+        x, 0, 0, 0,
+        0, y, 0, 0,
+        0, 0, z, 0,
+        0, 0, 0, 1
+    )
+
+
+def rotation_x(radians: number) -> Matrix:
+    return Matrix(
+        1, 0, 0, 0,
+        0, cos(radians), -sin(radians), 0,
+        0, sin(radians), cos(radians), 0,
+        0, 0, 0, 1
+    )
+
+
+def rotation_y(radians: number) -> Matrix:
+    return Matrix(
+        cos(radians), 0, sin(radians), 0,
+        0, 1, 0, 0,
+        -sin(radians), 0, cos(radians), 0,
+        0, 0, 0, 1
+    )
+
+
+def rotation_z(radians: number) -> Matrix:
+    return Matrix(
+        cos(radians), -sin(radians), 0, 0,
+        sin(radians), cos(radians), 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1
+    )
+
+
+def shearing(xy, xz, yx, yz, zx, zy):
+    return Matrix(
+        1, xy, xz, 0,
+        yx, 1, yz, 0,
+        zx, zy, 1, 0,
+        0, 0, 0, 1
+    )
+
+
+transforms.translation = translation
+transforms.scaling = scaling
+transforms.rotation_x = rotation_x
+transforms.rotation_y = rotation_y
+transforms.rotation_z = rotation_z
+transforms.shearing = shearing

@@ -5,6 +5,8 @@ Transforms are helper methods for creating Matrix objects.
 """
 from math import pi, sqrt
 
+from pytest import mark
+
 from tracer import transforms, Tuple
 
 
@@ -74,3 +76,18 @@ def test_rotation_z():
 
     assert half_quarter * point == Tuple.point(-sqrt(2)/2, sqrt(2)/2, 0)
     assert full_quarter * point == Tuple.point(-1, 0, 0)
+
+
+@mark.parametrize(
+    "transform, expected",
+    (
+        (transforms.shearing(1, 0, 0, 0, 0, 0), Tuple.point(5, 3, 4)),
+        (transforms.shearing(0, 1, 0, 0, 0, 0), Tuple.point(6, 3, 4)),
+        (transforms.shearing(0, 0, 1, 0, 0, 0), Tuple.point(2, 5, 4)),
+        (transforms.shearing(0, 0, 0, 1, 0, 0), Tuple.point(2, 7, 4)),
+        (transforms.shearing(0, 0, 0, 0, 1, 0), Tuple.point(2, 3, 6)),
+        (transforms.shearing(0, 0, 0, 0, 0, 1), Tuple.point(2, 3, 7))
+    )
+)
+def test_shearing(transform, expected):
+    assert transform * Tuple.point(2, 3, 4) == expected

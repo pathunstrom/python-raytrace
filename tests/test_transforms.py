@@ -26,56 +26,113 @@ def test_translation_no_effect_on_vectors():
     assert transform * vector == vector
 
 
-def test_scaling():
-    transform = transforms.scaling(2, 3, 4)
-    point = Tuple.point(-4, 6, 8)
-    vector = Tuple.vector(-4, 6, 8)
-    inverse = transform.inverse()
+data = [
+    (
+        transforms.scaling(2, 3, 4),
+        Tuple.vector(-4, 6, 8),
+        Tuple.vector(-8, 18, 32)
+    ),
+    (
+        Matrix.identity.scale(2, 3, 4),
+        Tuple.vector(-4, 6, 8),
+        Tuple.vector(-8, 18, 32)
+    ),
+    (
+        transforms.scaling(2, 3, 4).inverse(),
+        Tuple.point(-4, 6, 8),
+        Tuple.point(-2, 2, 2)
+    ),
+    (
+        transforms.scaling(2, 3, 4),
+        Tuple.point(-4, 6, 8),
+        Tuple.point(-8, 18, 32)
+    ),
+    (
+        Matrix.identity.scale(2, 3, 4),
+        Tuple.point(-4, 6, 8),
+        Tuple.point(-8, 18, 32)
+    ),
+    (
+        transforms.scaling(-1, 1, 1),
+        Tuple.point(2, 3, 4),
+        Tuple.point(-2, 3, 4)
+    ),
+    (
+        Matrix.identity.scale(-1, 1, 1),
+        Tuple.point(2, 3, 4),
+        Tuple.point(-2, 3, 4)
+    ),
+    (
+        transforms.rotation_x(pi / 4),
+        Tuple.point(0, 1, 0),
+        Tuple.point(0, sqrt(2)/2, sqrt(2)/2)
+    ),
+    (
+        Matrix.identity.rotate_x(pi / 4),
+        Tuple.point(0, 1, 0),
+        Tuple.point(0, sqrt(2) / 2, sqrt(2) / 2)
+    ),
+    (
+        transforms.rotation_x(pi / 2),
+        Tuple.point(0, 1, 0),
+        Tuple.point(0, 0, 1)
+    ),
+    (
+        Matrix.identity.rotate_x(pi / 2),
+        Tuple.point(0, 1, 0),
+        Tuple.point(0, 0, 1)
+    ),
+    [
+        transforms.rotation_y(pi / 4),
+        Tuple.point(0, 0, 1),
+        Tuple.point(sqrt(2)/2, 0, sqrt(2)/2)
+    ],
+    (
+        Matrix.identity.rotate_y(pi / 4),
+        Tuple.point(0, 0, 1),
+        Tuple.point(sqrt(2)/2, 0, sqrt(2)/2)
+    ),
+    (
+        transforms.rotation_y(pi / 2),
+        Tuple.point(0, 0, 1),
+        Tuple.point(1, 0, 0)
+    ),
+    (
+        Matrix.identity.rotate_y(pi / 2),
+        Tuple.point(0, 0, 1),
+        Tuple.point(1, 0, 0)
+    ),
+    (
+        transforms.rotation_z(pi / 4),
+        Tuple.point(0, 1, 0),
+        Tuple.point(-sqrt(2)/2, sqrt(2)/2, 0)
+    ),
+    (
+        transforms.rotation_z(pi / 2),
+        Tuple.point(0, 1, 0),
+        Tuple.point(-1, 0, 0)
+    ),
+    (
+        Matrix.identity.rotate_z(pi / 4),
+        Tuple.point(0, 1, 0),
+        Tuple.point(-sqrt(2)/2, sqrt(2)/2, 0)
+    ),
+    (
+        Matrix.identity.rotate_z(pi / 2),
+        Tuple.point(0, 1, 0),
+        Tuple.point(-1, 0, 0)
+    ),
+    (
+        transforms.rotation_x(pi / 4).inverse(),
+        Tuple.point(0, 1, 0),
+        Tuple.point(0, sqrt(2) / 2, -sqrt(2) / 2)
+    )
+]
 
-    assert transform * point == Tuple.point(-8, 18, 32)
-    assert inverse * point == Tuple.point(-2, 2, 2)
-    assert transform * vector == Tuple.vector(-8, 18, 32)
 
-
-def test_reflection():
-    transform = transforms.scaling(-1, 1, 1)
-    point = Tuple.point(2, 3, 4)
-
-    assert transform * point == Tuple.point(-2, 3, 4)
-
-
-def test_rotation_x():
-    point = Tuple.point(0, 1, 0)
-    half_quarter = transforms.rotation_x(pi / 4)
-    full_quarter = transforms.rotation_x(pi / 2)
-
-    assert half_quarter * point == Tuple.point(0, sqrt(2)/2, sqrt(2)/2)
-    assert full_quarter * point == Tuple.point(0, 0, 1)
-
-
-def test_rotation_x_inverse():
-    point = Tuple.point(0, 1, 0)
-    transform = transforms.rotation_x(pi / 4).inverse()
-
-    assert transform * point == Tuple.point(0, sqrt(2) / 2, -sqrt(2) / 2)
-
-
-def test_rotation_y():
-    point = Tuple.point(0, 0, 1)
-    half_quarter = transforms.rotation_y(pi / 4)
-    full_quarter = transforms.rotation_y(pi / 2)
-
-    assert half_quarter * point == Tuple.point(sqrt(2)/2, 0, sqrt(2)/2)
-    assert full_quarter * point == Tuple.point(1, 0, 0)
-
-
-def test_rotation_z():
-    point = Tuple.point(0, 1, 0)
-    half_quarter = transforms.rotation_z(pi / 4)
-    full_quarter = transforms.rotation_z(pi / 2)
-
-    assert half_quarter * point == Tuple.point(-sqrt(2)/2, sqrt(2)/2, 0)
-    assert full_quarter * point == Tuple.point(-1, 0, 0)
+@mark.parametrize("transform,_input,expected", data)
+def test_transform(transform, _input: Tuple, expected):
+    assert transform * _input == expected
 
 
 @mark.parametrize(
@@ -86,7 +143,14 @@ def test_rotation_z():
         (transforms.shearing(0, 0, 1, 0, 0, 0), Tuple.point(2, 5, 4)),
         (transforms.shearing(0, 0, 0, 1, 0, 0), Tuple.point(2, 7, 4)),
         (transforms.shearing(0, 0, 0, 0, 1, 0), Tuple.point(2, 3, 6)),
-        (transforms.shearing(0, 0, 0, 0, 0, 1), Tuple.point(2, 3, 7))
+        (transforms.shearing(0, 0, 0, 0, 0, 1), Tuple.point(2, 3, 7)),
+        (Matrix.identity.shear(1, 0, 0, 0, 0, 0), Tuple.point(5, 3, 4)),
+        (Matrix.identity.shear(0, 1, 0, 0, 0, 0), Tuple.point(6, 3, 4)),
+        (Matrix.identity.shear(0, 0, 1, 0, 0, 0), Tuple.point(2, 5, 4)),
+        (Matrix.identity.shear(0, 0, 0, 1, 0, 0), Tuple.point(2, 7, 4)),
+        (Matrix.identity.shear(0, 0, 0, 0, 1, 0), Tuple.point(2, 3, 6)),
+        (Matrix.identity.shear(0, 0, 0, 0, 0, 1), Tuple.point(2, 3, 7))
+
     )
 )
 def test_shearing(transform, expected):
@@ -121,5 +185,5 @@ def test_chained_transforms():
 
 def test_chained_transforms_fluent_api():
     point = Tuple.point(1, 0, 1)
-    transform = Matrix.identity.rotate(pi / 2).scale(5, 5, 5).translate(10, 5, 7)
+    transform = Matrix.identity.rotate_x(pi / 2).scale(5, 5, 5).translate(10, 5, 7)
     assert transform * point == Tuple.point(15, 0, 7)

@@ -118,22 +118,58 @@ class Matrix(UserList):
         return Matrix(*(v / determinate for v in cofactor_matrix.transpose()))
 
     def translate(self, x: number, y: number, z:number) -> Matrix:
-        return translation(x, y, z) @ self
+        transform = Matrix(
+            1, 0, 0, x,
+            0, 1, 0, y,
+            0, 0, 1, z,
+            0, 0, 0, 1
+        )
+        return transform @ self
 
     def scale(self, x: number, y: number, z: number) -> Matrix:
-        return scaling(x, y, z) @ self
+        transform = Matrix(
+            x, 0, 0, 0,
+            0, y, 0, 0,
+            0, 0, z, 0,
+            0, 0, 0, 1
+        )
+        return transform @ self
 
     def rotate_x(self, radians: number) -> Matrix:
-        return rotation_x(radians) @ self
+        transform = Matrix(
+            1, 0, 0, 0,
+            0, cos(radians), -sin(radians), 0,
+            0, sin(radians), cos(radians), 0,
+            0, 0, 0, 1
+        )
+        return transform @ self
 
     def rotate_y(self, radians: number) -> Matrix:
-        return rotation_y(radians) @ self
+        transform = Matrix(
+            cos(radians), 0, sin(radians), 0,
+            0, 1, 0, 0,
+            -sin(radians), 0, cos(radians), 0,
+            0, 0, 0, 1
+        )
+        return transform @ self
 
     def rotate_z(self, radians: number) -> Matrix:
-        return rotation_z(radians) @ self
+        transform = Matrix(
+            cos(radians), -sin(radians), 0, 0,
+            sin(radians), cos(radians), 0, 0,
+            0, 0, 1, 0,
+            0, 0, 0, 1
+        )
+        return transform @ self
 
     def shear(self, xy: number, xz: number, yx: number, yz: number, zx: number, zy: number) -> Matrix:
-        return shearing(xy, xz, yx, yz, zx, zy) @ self
+        transform = Matrix(
+            1, xy, xz, 0,
+            yx, 1, yz, 0,
+            zx, zy, 1, 0,
+            0, 0, 0, 1
+        )
+        return transform @ self
 
 
 Matrix.identity = Matrix(
@@ -146,63 +182,9 @@ Matrix.identity = Matrix(
 transforms = SimpleNamespace()
 
 
-def translation(x: number, y: number, z: number) -> Matrix:
-    return Matrix(
-        1, 0, 0, x,
-        0, 1, 0, y,
-        0, 0, 1, z,
-        0, 0, 0, 1
-    )
-
-
-def scaling(x: number, y: number, z: number) -> Matrix:
-    return Matrix(
-        x, 0, 0, 0,
-        0, y, 0, 0,
-        0, 0, z, 0,
-        0, 0, 0, 1
-    )
-
-
-def rotation_x(radians: number) -> Matrix:
-    return Matrix(
-        1, 0, 0, 0,
-        0, cos(radians), -sin(radians), 0,
-        0, sin(radians), cos(radians), 0,
-        0, 0, 0, 1
-    )
-
-
-def rotation_y(radians: number) -> Matrix:
-    return Matrix(
-        cos(radians), 0, sin(radians), 0,
-        0, 1, 0, 0,
-        -sin(radians), 0, cos(radians), 0,
-        0, 0, 0, 1
-    )
-
-
-def rotation_z(radians: number) -> Matrix:
-    return Matrix(
-        cos(radians), -sin(radians), 0, 0,
-        sin(radians), cos(radians), 0, 0,
-        0, 0, 1, 0,
-        0, 0, 0, 1
-    )
-
-
-def shearing(xy, xz, yx, yz, zx, zy):
-    return Matrix(
-        1, xy, xz, 0,
-        yx, 1, yz, 0,
-        zx, zy, 1, 0,
-        0, 0, 0, 1
-    )
-
-
-transforms.translation = translation
-transforms.scaling = scaling
-transforms.rotation_x = rotation_x
-transforms.rotation_y = rotation_y
-transforms.rotation_z = rotation_z
-transforms.shearing = shearing
+transforms.translation = Matrix.identity.translate
+transforms.scaling = Matrix.identity.scale
+transforms.rotation_x = Matrix.identity.rotate_x
+transforms.rotation_y = Matrix.identity.rotate_y
+transforms.rotation_z = Matrix.identity.rotate_z
+transforms.shearing = Matrix.identity.shear

@@ -4,12 +4,10 @@ from collections import UserList
 from itertools import chain, product
 from math import isclose, cos, sin
 from types import SimpleNamespace
-from typing import Union
 
-from .constants import EPSILON
+from .shared import EPSILON, number
 from .tuples import Tuple
 
-number = Union[float, int]
 
 
 class Matrix(UserList):

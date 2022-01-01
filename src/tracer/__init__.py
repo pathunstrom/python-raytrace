@@ -1,4 +1,6 @@
+from .shared import *
+from .hulls import Sphere
 from .matrices import Matrix, transforms
-from .tuples import Tuple, Color, ZERO_VECTOR
+from .rays import Ray
 from .renderer import Canvas
-from .constants import *
+from .tuples import Tuple, Color, ZERO_VECTOR

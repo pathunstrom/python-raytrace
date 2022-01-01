@@ -4,7 +4,7 @@ from functools import wraps, singledispatchmethod
 from math import isclose, sqrt
 from typing import Union, NamedTuple
 
-from tracer.constants import EPSILON
+from tracer.shared import EPSILON
 
 
 def length_protection(function):

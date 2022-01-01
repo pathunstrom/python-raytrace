@@ -91,3 +91,29 @@ def test_rotation_z():
 )
 def test_shearing(transform, expected):
     assert transform * Tuple.point(2, 3, 4) == expected
+
+
+def test_applying_transforms_in_sequence():
+    point = Tuple.point(1, 0, 1)
+    rotation = transforms.rotation_x(pi / 2)
+    scaling = transforms.scaling(5, 5, 5)
+    translation = transforms.translation(10, 5, 7)
+
+    point = rotation * point
+    assert point == Tuple.point(1, -1, 0)
+
+    point = scaling * point
+    assert point == Tuple.point(5, -5, 0)
+
+    point = translation * point
+    assert point == Tuple.point(15, 0, 7)
+
+
+def test_chained_transforms():
+    point = Tuple.point(1, 0, 1)
+    rotation = transforms.rotation_x(pi / 2)
+    scaling = transforms.scaling(5, 5, 5)
+    translation = transforms.translation(10, 5, 7)
+
+    transform = translation @ scaling @ rotation
+    assert transform * point == Tuple.point(15, 0, 7)

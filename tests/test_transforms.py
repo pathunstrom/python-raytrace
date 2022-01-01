@@ -7,7 +7,7 @@ from math import pi, sqrt
 
 from pytest import mark
 
-from tracer import transforms, Tuple
+from tracer import transforms, Tuple, Matrix
 
 
 def test_translation():
@@ -116,4 +116,10 @@ def test_chained_transforms():
     translation = transforms.translation(10, 5, 7)
 
     transform = translation @ scaling @ rotation
+    assert transform * point == Tuple.point(15, 0, 7)
+
+
+def test_chained_transforms_fluent_api():
+    point = Tuple.point(1, 0, 1)
+    transform = Matrix.identity.rotate(pi / 2).scale(5, 5, 5).translate(10, 5, 7)
     assert transform * point == Tuple.point(15, 0, 7)

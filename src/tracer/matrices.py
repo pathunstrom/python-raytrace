@@ -117,6 +117,24 @@ class Matrix(UserList):
         determinate = self.determinant()
         return Matrix(*(v / determinate for v in cofactor_matrix.transpose()))
 
+    def translate(self, x: number, y: number, z:number) -> Matrix:
+        return translation(x, y, z) @ self
+
+    def scale(self, x: number, y: number, z: number) -> Matrix:
+        return scaling(x, y, z) @ self
+
+    def rotate_x(self, radians: number) -> Matrix:
+        return rotation_x(radians) @ self
+
+    def rotate_y(self, radians: number) -> Matrix:
+        return rotation_y(radians) @ self
+
+    def rotate_z(self, radians: number) -> Matrix:
+        return rotation_z(radians) @ self
+
+    def shear(self, xy: number, xz: number, yx: number, yz: number, zx: number, zy: number) -> Matrix:
+        return shearing(xy, xz, yx, yz, zx, zy) @ self
+
 
 Matrix.identity = Matrix(
     1, 0, 0, 0,

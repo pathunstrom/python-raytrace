@@ -3,7 +3,7 @@ from __future__ import annotations
 from collections import UserList
 from dataclasses import dataclass
 from math import sqrt
-from typing import Protocol
+from typing import Protocol, Optional
 
 from .shared import number
 from .tuples import Tuple
@@ -22,7 +22,11 @@ class Intersection:
 
 
 class Intersections(UserList):
-    pass
+    def hit(self) -> Optional[Intersection]:
+        try:
+            return sorted((i for i in self if i.distance > 0) , key=lambda x: x.distance)[0]
+        except IndexError:
+            return None
 
 
 @dataclass

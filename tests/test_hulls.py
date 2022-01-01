@@ -57,3 +57,22 @@ def test_intersections():
     assert len(intersections) == 2
     assert intersections[0].distance == 1
     assert intersections[1].distance == 2
+
+
+@mark.parametrize(
+    "distances, expected_index",
+    [
+        [[1, 2], 0],
+        [[-1, 1], 1],
+        [[-2, -1], None],
+        [[5, 7, -3, 2], 3]
+    ]
+)
+def test_intersections_hit(distances, expected_index: int):
+    sphere = Sphere()
+    intersections = Intersections(Intersection(distance, sphere) for distance in distances)
+    hit = intersections.hit()
+    if expected_index is None:
+        assert hit is None
+    else:
+        assert intersections[expected_index] is hit

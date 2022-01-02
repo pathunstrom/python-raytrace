@@ -2,7 +2,7 @@ from math import isclose, sqrt
 
 from pytest import mark, raises
 
-from tracer import Tuple, Color, ZERO_VECTOR, EPSILON
+from tracer import Tuple, Color, ZERO_VECTOR, EPSILON, point, vector
 
 
 @mark.parametrize(
@@ -38,8 +38,8 @@ def test_tuple_is_vector(x, y, z, w):
     )
 )
 def test_tuple_point(x, y, z):
-    point = Tuple.point(x, y, z)
-    assert point == Tuple(x, y, z, 1)
+    _point = point(x, y, z)
+    assert _point == Tuple(x, y, z, 1)
 
 
 @mark.parametrize(
@@ -49,8 +49,8 @@ def test_tuple_point(x, y, z):
     )
 )
 def test_tuple_vector(x, y, z):
-    vector = Tuple.vector(x, y, z)
-    assert vector == Tuple(x, y, z, 0)
+    _vector = vector(x, y, z)
+    assert _vector == Tuple(x, y, z, 0)
 
 
 @mark.parametrize(
@@ -78,19 +78,19 @@ def test_tuple_addition(left, right, expected):
     )
 )
 def test_tuple_subtraction_point_from_point(left, right, expected):
-    assert Tuple.point(*left) - Tuple.point(*right) == Tuple.vector(*expected)
+    assert Tuple.point(*left) - Tuple.point(*right) == vector(*expected)
 
 
 def test_tuple_subtraction_vector_from_point():
-    assert Tuple.point(3, 2, 1) - Tuple.vector(5, 6, 7) == Tuple.point(-2, -4, -6)
+    assert point(3, 2, 1) - vector(5, 6, 7) == point(-2, -4, -6)
 
 
 def test_tuple_subtraction_vector_from_vector():
-    assert Tuple.vector(3, 2, 1) - Tuple.vector(5, 6, 7) == Tuple.vector(-2, -4, -6)
+    assert vector(3, 2, 1) - vector(5, 6, 7) == vector(-2, -4, -6)
 
 
 def test_tuple_subtraction_from_zero_vector():
-    assert ZERO_VECTOR - Tuple.vector(1, -2, 3) == Tuple.vector(-1, 2, -3)
+    assert ZERO_VECTOR - vector(1, -2, 3) == vector(-1, 2, -3)
 
 
 def test_tuple_negation():
@@ -124,7 +124,7 @@ def test_tuple_divide_scalars():
     )
 )
 def test_tuple_magnitude(inputs, expected):
-    assert isclose(Tuple.vector(*inputs).magnitude, expected, abs_tol=EPSILON)
+    assert isclose(vector(*inputs).magnitude, expected, abs_tol=EPSILON)
 
 
 @mark.parametrize(
@@ -135,20 +135,20 @@ def test_tuple_magnitude(inputs, expected):
     )
 )
 def test_tuple_normalize(input, expected):
-    normalized = Tuple.vector(*input).normalize()
-    assert normalized == Tuple.vector(*expected)
+    normalized = vector(*input).normalize()
+    assert normalized == vector(*expected)
     assert isclose(normalized.magnitude, 1, abs_tol=EPSILON)
 
 
 def test_tuple_dot_product():
-    assert Tuple.vector(1, 2, 3).dot(Tuple.vector(2, 3, 4)) == 20
+    assert vector(1, 2, 3).dot(vector(2, 3, 4)) == 20
 
 
 def test_tuple_cross_product():
-    a = Tuple.vector(1, 2, 3)
-    b = Tuple.vector(2, 3, 4)
-    assert a.cross(b) == Tuple.vector(-1, 2, -1)
-    assert b.cross(a) == Tuple.vector(1, -2, 1)
+    a = vector(1, 2, 3)
+    b = vector(2, 3, 4)
+    assert a.cross(b) == vector(-1, 2, -1)
+    assert b.cross(a) == vector(1, -2, 1)
 
 
 def test_cant_add_color_to_tuple():

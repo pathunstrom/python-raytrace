@@ -1,7 +1,7 @@
 from __future__ import annotations
 from pytest import mark
 
-from tracer import Intersection, Intersections, Ray, Sphere, Tuple, transforms, Matrix
+from tracer import Intersection, Intersections, Ray, Sphere, Tuple, transforms, Matrix, point, vector
 
 
 @mark.parametrize(
@@ -11,11 +11,16 @@ from tracer import Intersection, Intersections, Ray, Sphere, Tuple, transforms, 
         [Tuple.point(0, 1, -5), Intersections((Intersection(5, Sphere()), Intersection(5, Sphere())))],
         [Tuple.point(0, 2, -5), Intersections()],
         [Tuple.point(0, 0, 0), Intersections((Intersection(-1, Sphere()), Intersection(1, Sphere())))],
-        [Tuple.point(0, 0, 5), Intersections((Intersection(-6, Sphere()), Intersection(-4, Sphere())))]
+        [Tuple.point(0, 0, 5), Intersections((Intersection(-6, Sphere()), Intersection(-4, Sphere())))],
+        [point(0, 0, -5), Intersections((Intersection(4, Sphere()), Intersection(6, Sphere())))],
+        [point(0, 1, -5), Intersections((Intersection(5, Sphere()), Intersection(5, Sphere())))],
+        [point(0, 2, -5), Intersections()],
+        [point(0, 0, 0), Intersections((Intersection(-1, Sphere()), Intersection(1, Sphere())))],
+        [point(0, 0, 5), Intersections((Intersection(-6, Sphere()), Intersection(-4, Sphere())))]
     ]
 )
 def test_sphere_intersection(origin: Tuple, expected: Intersections[Intersection]):
-    ray = Ray(origin, Tuple.vector(0, 0, 1))
+    ray = Ray(origin, vector(0, 0, 1))
     sphere = Sphere()
     for i in expected:
         i.hull = sphere  # We need the expected sphere to be the original sphere.
@@ -27,8 +32,8 @@ def test_sphere_intersection(origin: Tuple, expected: Intersections[Intersection
 
 
 def test_create_ray():
-    origin = Tuple.point(1, 2, 3)
-    direction = Tuple.vector(4, 5, 6)
+    origin = point(1, 2, 3)
+    direction = vector(4, 5, 6)
     ray = Ray(origin, direction)
     assert ray.origin == origin
     assert ray.direction == direction
@@ -37,8 +42,8 @@ def test_create_ray():
 @mark.parametrize(
     "ray,transform,expected_ray",
     [
-        [Ray(Tuple.point(1, 2, 3), Tuple.vector(0, 1, 0)), transforms.translation(3, 4, 5), Ray(Tuple.point(4, 6, 8), Tuple.vector(0, 1, 0))],
-
+        [Ray(point(1, 2, 3), vector(0, 1, 0)), transforms.translation(3, 4, 5), Ray(point(4, 6, 8), vector(0, 1, 0))],
+        [Ray(point(1, 2, 3), vector(0, 1, 0)), transforms.scaling(2, 3, 4), Ray(point(2, 6, 12), vector(0, 3, 0))]
     ]
 )
 def test_ray_transform(ray: Ray, transform: Matrix, expected_ray: Ray):
@@ -49,10 +54,10 @@ def test_ray_transform(ray: Ray, transform: Matrix, expected_ray: Ray):
 
 def test_ray_position():
     ray = Ray(Tuple.point(2, 3, 4), Tuple.vector(1, 0, 0))
-    assert ray.position(0) == Tuple.point(2, 3, 4)
-    assert ray.position(1) == Tuple.point(3, 3, 4)
-    assert ray.position(-1) == Tuple.point(1, 3, 4)
-    assert ray.position(2.5) == Tuple.point(4.5, 3, 4)
+    assert ray.position(0) == point(2, 3, 4)
+    assert ray.position(1) == point(3, 3, 4)
+    assert ray.position(-1) == point(1, 3, 4)
+    assert ray.position(2.5) == point(4.5, 3, 4)
 
 
 def test_intersection():

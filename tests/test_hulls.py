@@ -1,7 +1,7 @@
 from __future__ import annotations
 from pytest import mark
 
-from tracer import Intersection, Intersections, Ray, Sphere, Tuple
+from tracer import Intersection, Intersections, Ray, Sphere, Tuple, transforms, Matrix
 
 
 @mark.parametrize(
@@ -34,7 +34,20 @@ def test_create_ray():
     assert ray.direction == direction
 
 
-def test_position():
+@mark.parametrize(
+    "ray,transform,expected_ray",
+    [
+        [Ray(Tuple.point(1, 2, 3), Tuple.vector(0, 1, 0)), transforms.translation(3, 4, 5), Ray(Tuple.point(4, 6, 8), Tuple.vector(0, 1, 0))],
+
+    ]
+)
+def test_ray_transform(ray: Ray, transform: Matrix, expected_ray: Ray):
+    result: Ray = ray.transform(transform)
+    assert result.origin == expected_ray.origin
+    assert result.direction == expected_ray.direction
+
+
+def test_ray_position():
     ray = Ray(Tuple.point(2, 3, 4), Tuple.vector(1, 0, 0))
     assert ray.position(0) == Tuple.point(2, 3, 4)
     assert ray.position(1) == Tuple.point(3, 3, 4)

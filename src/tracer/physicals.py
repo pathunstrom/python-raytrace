@@ -7,6 +7,7 @@ from typing import Protocol, Optional
 
 from .shared import number
 from .tuples import Tuple
+from .matrices import Matrix
 
 
 class Hull(Protocol):
@@ -39,6 +40,12 @@ class Ray:
 
     def intersects(self, hull: Hull):
         return hull.intersects(self)
+
+    def transform(self, transform: Matrix) -> Ray:
+        return Ray(
+            transform * self.origin,
+            transform * self.direction
+        )
 
 
 @dataclass

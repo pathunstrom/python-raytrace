@@ -52,6 +52,7 @@ class Ray:
 class Sphere:
     origin: Tuple = Tuple.point(0, 0, 0)
     radius: number = 1
+    transform: Matrix = Matrix.identity
 
     def intersects(self, ray: Ray) -> Intersections[Intersection]:
         sphere_to_ray = ray.origin - self.origin

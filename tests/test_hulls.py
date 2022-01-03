@@ -1,7 +1,18 @@
 from __future__ import annotations
+
 from pytest import mark
 
-from tracer import Intersection, Intersections, Ray, Sphere, Tuple, transforms, Matrix, point, vector
+from tracer import (
+    Intersection,
+    Intersections,
+    Ray,
+    Sphere,
+    Tuple,
+    transforms,
+    Matrix,
+    point,
+    vector
+)
 
 
 @mark.parametrize(
@@ -94,3 +105,20 @@ def test_intersections_hit(distances, expected_index: int):
         assert hit is None
     else:
         assert intersections[expected_index] is hit
+
+
+def test_sphere_default_transform():
+    assert Sphere().transform == Matrix.identity
+
+
+def test_sphere_change_transform():
+    transform = transforms.translation(2, 3, 4)
+    sphere = Sphere()
+    sphere.transform = transform
+    assert sphere.transform == transform
+
+
+def test_sphere_initialize_transform():
+    transform = transforms.shearing(1, 2, 3, 4, 5, 6)
+    sphere = Sphere(transform=transform)
+    assert sphere.transform == transform

@@ -77,11 +77,11 @@ class Tuple(NamedTuple):
         return Tuple(*(v / magnitude for v in self))
 
     @classmethod
-    def point(cls, x, y, z):
+    def point(cls, x, y, z) -> Tuple:
         return cls(x, y, z, 1)
 
     @classmethod
-    def vector(cls, x, y, z):
+    def vector(cls, x, y, z) -> Tuple:
         return cls(x, y, z, 0)
 
     def __add__(self, other):
@@ -96,7 +96,7 @@ class Tuple(NamedTuple):
     def __neg__(self):
         return type(self)(*(-x for x in self))
 
-    def __sub__(self, other):
+    def __sub__(self, other) -> Tuple:
         return subtract(self, other)
 
     def __truediv__(self, scalar):

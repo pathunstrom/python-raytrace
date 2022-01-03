@@ -55,6 +55,8 @@ class Sphere:
     transform: Matrix = Matrix.identity
 
     def intersects(self, ray: Ray) -> Intersections[Intersection]:
+        ray = ray.transform(self.transform.inverse())
+
         sphere_to_ray = ray.origin - self.origin
 
         a = ray.direction.dot(ray.direction)

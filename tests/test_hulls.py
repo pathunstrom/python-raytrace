@@ -107,6 +107,24 @@ def test_intersections_hit(distances, expected_index: int):
         assert intersections[expected_index] is hit
 
 
+@mark.parametrize(
+    "transform, expected",
+    [
+        [transforms.scaling(2, 2, 2), Intersections((Intersection(3, Sphere()), Intersection(7, Sphere())))],
+        [transforms.translation(5, 0, 0), Intersections()]
+    ]
+)
+def test_intersections_transformed(transform: Matrix, expected: Intersections[Intersection]):
+    ray = Ray(point(0, 0, -5), vector(0, 0, 1))
+    sphere = Sphere(transform=transform)
+    for i in expected:
+        i.hull = sphere
+    intersections = sphere.intersects(ray)
+    assert len(intersections) == len(expected)
+    for actual, expected in zip(intersections, expected):
+        assert actual == expected
+
+
 def test_sphere_default_transform():
     assert Sphere().transform == Matrix.identity
 

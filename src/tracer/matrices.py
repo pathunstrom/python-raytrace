@@ -48,7 +48,10 @@ class Matrix(UserList):
         return Matrix(*values)
 
     def __mul__(self, _tuple: Tuple):
-        return Tuple(*(_tuple.dot(row) for row in self.rows))
+        if self.size == 4:
+            return Tuple(*(_tuple.dot(row) for row in self.rows))
+        else:
+            return Tuple(*(_tuple.dot(row) for row in self.rows), 0)
 
     @property
     def rows(self):

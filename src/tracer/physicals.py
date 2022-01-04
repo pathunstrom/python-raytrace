@@ -71,3 +71,9 @@ class Sphere:
         intersection_2 = (-b + sqrt(discriminant)) / (2 * a)
 
         return Intersections((Intersection(intersection_1, self), Intersection(intersection_2, self)))
+
+    def normal_at(self, world_point: Tuple) -> Tuple:
+        object_point = self.transform.inverse() * world_point
+        object_space_normal = object_point - self.origin
+        x, y, z, _ = self.transform.submatrix(3, 3).inverse().transpose() * object_space_normal
+        return Tuple(x, y, z, 0).normalize()

@@ -20,3 +20,14 @@ def test_sphere_normal_at(transform, _point, expected_normal):
     normal: Tuple = sphere.normal_at(_point)
     assert normal == expected_normal
     assert normal == normal.normalize()
+
+
+@mark.parametrize(
+    "_vector, normal, expected",
+    [
+        [vector(1, -1, 0), vector(0, 1, 0), vector(1, 1, 0)],
+        [vector(0, -1, 0), vector(sqrt(2)/2, sqrt(2)/2, 0), vector(1, 0, 0)]
+    ]
+)
+def test_vector_reflect(_vector, normal, expected):
+    assert _vector.reflect(normal) == expected

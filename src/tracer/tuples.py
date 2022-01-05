@@ -76,6 +76,9 @@ class Tuple(NamedTuple):
         magnitude = self.magnitude
         return Tuple(*(v / magnitude for v in self))
 
+    def reflect(self, normal) -> Tuple:
+        return self - normal * 2 * self.dot(normal)
+
     @classmethod
     def point(cls, x, y, z) -> Tuple:
         return cls(x, y, z, 1)

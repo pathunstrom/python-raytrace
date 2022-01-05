@@ -6,7 +6,7 @@ from math import sqrt
 from typing import Protocol, Optional
 
 from .shared import number
-from .tuples import Tuple
+from .tuples import Tuple, Color
 from .matrices import Matrix
 
 
@@ -49,10 +49,20 @@ class Ray:
 
 
 @dataclass
+class Material:
+    color: Color = Color(1, 1, 1)
+    ambient: int | float = 0.1
+    diffuse: int | float = 0.9
+    specular: int | float = 0.9
+    shininess: int | float = 200.0
+
+
+@dataclass
 class Sphere:
     origin: Tuple = Tuple.point(0, 0, 0)
     radius: number = 1
     transform: Matrix = Matrix.identity
+    material: Material = Material()
 
     def intersects(self, ray: Ray) -> Intersections[Intersection]:
         ray = ray.transform(self.transform.inverse())
@@ -77,3 +87,9 @@ class Sphere:
         object_space_normal = object_point - self.origin
         x, y, z, _ = self.transform.submatrix(3, 3).inverse().transpose() * object_space_normal
         return Tuple(x, y, z, 0).normalize()
+
+
+@dataclass
+class Light:
+    position: Tuple = Tuple.point(0, 0, 0)
+    intensity: Color = Color(1, 1, 1)

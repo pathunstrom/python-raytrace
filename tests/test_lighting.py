@@ -1,7 +1,16 @@
 from math import sqrt, pi
 from pytest import mark
 
-from tracer import Sphere, point, vector, Tuple, Matrix
+from tracer import (
+    Sphere,
+    point,
+    vector,
+    Tuple,
+    Matrix,
+    Color,
+    Light,
+    Material,
+)
 
 
 @mark.parametrize(
@@ -31,3 +40,41 @@ def test_sphere_normal_at(transform, _point, expected_normal):
 )
 def test_vector_reflect(_vector, normal, expected):
     assert _vector.reflect(normal) == expected
+
+
+def test_point_light():
+    intensity = Color(1, 1, 1)
+    position = point(0, 0, 0)
+    light = Light(position, intensity)
+    assert light.position == position
+    assert light.intensity == intensity
+
+
+def test_material():
+    material = Material()
+    assert material.color == Color(1, 1, 1)
+    assert material.ambient == 0.1
+    assert material.diffuse == 0.9
+    assert material.specular == 0.9
+    assert material.shininess == 200
+
+
+def test_sphere_material():
+    sphere = Sphere()
+    assert sphere.material == Material()
+
+
+def test_sphere_material_instantiate():
+    sphere = Sphere(material=Material(ambient=1))
+    assert sphere.material.ambient == 1
+    assert sphere.material.diffuse == 0.9
+    assert sphere.material.specular == 0.9
+    assert sphere.material.shininess == 200
+
+
+def test_sphere_material_set():
+    sphere = Sphere()
+    material = Material()
+    material.ambient = 1
+    sphere.material = material
+    assert sphere.material == material

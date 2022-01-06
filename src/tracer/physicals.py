@@ -14,8 +14,12 @@ black = Color(0, 0, 0)
 
 
 class Hull(Protocol):
+    material: Material
 
     def intersects(self, ray: Ray) -> Intersections[Intersection]:
+        ...
+
+    def normal_at(self, point: Tuple) -> Tuple:
         ...
 
 

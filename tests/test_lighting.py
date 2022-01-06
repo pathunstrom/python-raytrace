@@ -1,5 +1,5 @@
 from math import sqrt, pi
-from pytest import mark
+from pytest import mark, fixture
 
 from tracer import (
     Sphere,
@@ -11,6 +11,16 @@ from tracer import (
     Light,
     Material,
 )
+
+
+@fixture
+def surface_material():
+    return Material()
+
+
+@fixture
+def surface_position():
+    return point(0, 0, 0)
 
 
 @mark.parametrize(
@@ -78,3 +88,17 @@ def test_sphere_material_set():
     material.ambient = 1
     sphere.material = material
     assert sphere.material == material
+
+
+@mark.parametrize(
+    "eye_vector, surface_normal, light, expected_color",
+    [
+        [vector(0, 0, -1), vector(0, 0, -1), Light(point(0, 0, -10), Color(1, 1, 1)), Color(1.9, 1.9, 1.9)],
+        [vector(0, sqrt(2)/2, sqrt(2)/2), vector(0, 0, -1), Light(point(0, 0, -10), Color(1, 1, 1)), Color(1, 1, 1)],
+        [vector(0, 0, -1), vector(0, 0, -1), Light(point(0, 10, -10), Color(1, 1, 1)), Color(0.7364, 0.7364, 0.7364)],
+        [vector(0, -sqrt(2)/2, -sqrt(2)/2), vector(0, 0, -1), Light(point(0, 10, -10), Color(1, 1, 1)), Color(1.6364, 1.6364, 1.6364)],
+        [vector(0, 0, -1), vector(0, 0, -1), Light(point(0, 0, 10), Color(1, 1, 1)), Color(0.1, 0.1, 0.1)],
+    ]
+)
+def test_material_lighting(surface_material, surface_position, eye_vector, surface_normal, light, expected_color):
+    assert surface_material.lighting(light, surface_position, eye_vector, surface_normal) == expected_color

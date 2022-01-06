@@ -10,6 +10,9 @@ from .tuples import Tuple, Color
 from .matrices import Matrix
 
 
+black = Color(0, 0, 0)
+
+
 class Hull(Protocol):
 
     def intersects(self, ray: Ray) -> Intersections[Intersection]:
@@ -55,6 +58,30 @@ class Material:
     diffuse: int | float = 0.9
     specular: int | float = 0.9
     shininess: int | float = 200.0
+
+    def lighting(self, light: Light, surface_position: Tuple, eye_vector: Tuple, surface_normal: Tuple) -> Color:
+        effective_color = self.color * light.intensity
+        light_vector = (light.position - surface_position).normalize()
+
+        ambient = effective_color * self.ambient
+
+        light_v_dot_surface_normal = light_vector.dot(surface_normal)
+
+        if light_v_dot_surface_normal < 0:
+            return ambient + black + black
+
+        diffuse = effective_color * self.diffuse * light_v_dot_surface_normal
+
+        reflection_vector = (-light_vector).reflect(surface_normal)
+        reflect_dot_eye = reflection_vector.dot(eye_vector)
+
+        if reflect_dot_eye <0:
+            return ambient + diffuse + black
+
+        factor = reflect_dot_eye ** self.shininess
+        specular = light.intensity * self.specular * factor
+
+        return ambient + diffuse + specular
 
 
 @dataclass

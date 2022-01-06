@@ -111,22 +111,22 @@ class Color(NamedTuple):
     green: Union[float, int]
     blue: Union[float, int]
 
-    def __add__(self, other):
+    def __add__(self, other) -> Color:
         return add(self, other)
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> Color:
         return compare_equality(self, other)
 
-    def __sub__(self, other):
+    def __sub__(self, other) -> Color:
         return subtract(self, other)
 
     @singledispatchmethod
-    def __mul__(self, other):
+    def __mul__(self, other) -> Color:
         return hadamard_product(self, other)
 
     @__mul__.register(int)
     @__mul__.register(float)
-    def _(self, scalar):
+    def _(self, scalar) -> Color:
         return scalar_multiplication(self, scalar)
 
 

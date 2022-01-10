@@ -2,7 +2,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 from .matrices import Matrix
-from .physicals import Light, Hull, Sphere, Material, Intersections, Computations
+from .physicals import Light, Hull, Sphere, Material, Intersections, Computations, Ray
 from .tuples import Tuple, Color
 
 
@@ -16,6 +16,14 @@ class World:
 
     def __contains__(self, item):
         return item in self.children or item in self.lights
+
+    def color_at(self, ray: Ray):
+        intersections = self.intersect(ray)
+        hit = intersections.hit()
+        if not hit:
+            return Color(0, 0, 0)
+        computations = hit.prepare_computations(ray)
+        return self.shade_hit(computations)
 
     @classmethod
     def default(cls) -> World:

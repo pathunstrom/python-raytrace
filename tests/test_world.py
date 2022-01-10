@@ -64,3 +64,26 @@ def test_world_shade_hit_inside():
     computations = intersection.prepare_computations(ray)
     color = world.shade_hit(computations)
     assert color == Color(0.90498, 0.90498, 0.90498)
+
+
+def test_world_color_at_no_hit():
+    world = World.default()
+    ray = Ray(point(0, 0, -5), vector(0, 1, 0))
+    color = world.color_at(ray)
+    assert color == Color(0, 0, 0)
+
+
+def test_world_color_at_hit():
+    world = World.default()
+    ray = Ray(point(0, 0, -5), vector(0, 0, 1))
+    color = world.color_at(ray)
+    assert color == Color(0.38066, 0.47583, 0.2855)
+
+
+def test_world_color_at_with_negative_intersection():
+    world = World.default()
+    world.children[0].material.ambient = 1
+    world.children[1].material.ambient = 1
+    ray = Ray(point(0, 0, 0.75), vector(0, 0, -1))
+    color = world.color_at(ray)
+    assert color == world.children[1].material.color

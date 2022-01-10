@@ -30,6 +30,7 @@ class Computations:
     point: Tuple
     eye_vector: Tuple
     normal_vector: Tuple
+    inside: bool = False
 
 
 @dataclass
@@ -39,12 +40,20 @@ class Intersection:
 
     def prepare_computations(self, ray) -> Computations:
         point = ray.position(self.distance)
+        eye_vector = -ray.direction
+        normal_vector = self.hull.normal_at(point)
+        inside = False
+        if normal_vector.dot(eye_vector) < 0:
+            inside = True
+            normal_vector = -normal_vector
+
         return Computations(
             self.distance,
             self.hull,
             point,
-            -ray.direction,
-            self.hull.normal_at(point)
+            eye_vector,
+            normal_vector,
+            inside
         )
 
 

@@ -89,6 +89,18 @@ def test_intersection_prepare_computations():
     assert comps.point == point(0, 0, -1)
     assert comps.eye_vector == vector(0, 0, -1)
     assert comps.normal_vector == vector(0, 0, -1)
+    assert not comps.inside
+
+
+def test_intersection_prepare_computations_inside_hit():
+    ray = Ray(point(0, 0, 0), vector(0, 0, 1))
+    shape = Sphere()
+    intersection = Intersection(1, shape)
+    computations = intersection.prepare_computations(ray)
+    assert computations.point == point(0, 0, 1)
+    assert computations.eye_vector == vector(0, 0, -1)
+    assert computations.normal_vector == vector(0, 0, -1)
+    assert computations.inside
 
 
 def test_intersections():

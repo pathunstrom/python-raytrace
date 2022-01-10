@@ -78,6 +78,19 @@ def test_intersection():
     assert intersection.hull == sphere
 
 
+def test_intersection_prepare_computations():
+    ray = Ray(point(0, 0, -5), vector(0, 0, 1))
+    shape = Sphere()
+    intersection = Intersection(4, shape)
+    comps = intersection.prepare_computations(ray)
+
+    assert comps.distance == intersection.distance
+    assert comps.hull == intersection.hull
+    assert comps.point == point(0, 0, -1)
+    assert comps.eye_vector == vector(0, 0, -1)
+    assert comps.normal_vector == vector(0, 0, -1)
+
+
 def test_intersections():
     sphere = Sphere()
     intersection_1 = Intersection(1, sphere)
@@ -140,3 +153,5 @@ def test_sphere_initialize_transform():
     transform = transforms.shearing(1, 2, 3, 4, 5, 6)
     sphere = Sphere(transform=transform)
     assert sphere.transform == transform
+
+

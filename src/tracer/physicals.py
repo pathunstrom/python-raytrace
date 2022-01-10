@@ -24,9 +24,28 @@ class Hull(Protocol):
 
 
 @dataclass
+class Computations:
+    distance: number
+    hull: Hull
+    point: Tuple
+    eye_vector: Tuple
+    normal_vector: Tuple
+
+
+@dataclass
 class Intersection:
     distance: number
     hull: Hull
+
+    def prepare_computations(self, ray) -> Computations:
+        point = ray.position(self.distance)
+        return Computations(
+            self.distance,
+            self.hull,
+            point,
+            -ray.direction,
+            self.hull.normal_at(point)
+        )
 
 
 class Intersections(UserList):

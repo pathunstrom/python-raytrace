@@ -1,3 +1,5 @@
+import time
+
 from tracer import (
     Canvas,
     Color,
@@ -12,10 +14,10 @@ from tracer import (
 
 vec: Tuple
 
-canvas_pixels = 100
+canvas_pixels = 300
 wall_size = 7
 transform = Matrix.identity
-file_name = "circle3d-12.ppm"
+file_name = "singlethreaded.ppm"
 
 pixel_size = wall_size / canvas_pixels
 half = wall_size / 2
@@ -27,6 +29,8 @@ sphere = Sphere(transform=transform, material=Material(color=Color(0.7, 0.3, 0.7
 light = Light(point(-10, 10, -10), Color(1, 1, 1))
 
 surface_z = 10
+
+start_time = time.monotonic()
 
 for y in range(canvas_pixels):
     world_y = half - (pixel_size * y)
@@ -45,3 +49,5 @@ for y in range(canvas_pixels):
         canvas[x, y] = color
 
 canvas.save(file_name)
+
+print(f"Run time: {time.monotonic() - start_time} seconds")

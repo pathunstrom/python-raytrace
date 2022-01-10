@@ -2,7 +2,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 from .matrices import Matrix
-from .physicals import Light, Hull, Sphere, Material
+from .physicals import Light, Hull, Sphere, Material, Intersections
 from .tuples import Tuple, Color
 
 
@@ -33,3 +33,9 @@ class World:
             )
         ]
         return World(children, lights)
+
+    def intersect(self, ray):
+        intersections = []
+        for hull in self.children:
+            intersections.extend(hull.intersects(ray))
+        return Intersections(sorted(intersections, key=lambda x: x.distance))

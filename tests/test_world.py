@@ -1,5 +1,6 @@
 from tracer import (
     Color,
+    Intersection,
     Light,
     Material,
     point,
@@ -42,3 +43,24 @@ def test_world_intersect():
     assert len(intersections) == 4
     for intersection, expected_distance in zip(intersections, [4, 4.5, 5.5, 6]):
         assert intersection.distance == expected_distance
+
+
+def test_world_shade_hit():
+    world = World.default()
+    ray = Ray(point(0, 0, -5), vector(0, 0, 1))
+    shape = world.children[0]
+    intersection = Intersection(4, shape)
+    computations = intersection.prepare_computations(ray)
+    color = world.shade_hit(computations)
+    assert color == Color(0.38066, 0.47583, 0.2855)
+
+
+def test_world_shade_hit_inside():
+    world = World.default()
+    world.lights[0].position = point(0, 0.25, 0)
+    ray = Ray(point(0, 0, 0), vector(0, 0, 1))
+    shape = world.children[1]
+    intersection = Intersection(0.5, shape)
+    computations = intersection.prepare_computations(ray)
+    color = world.shade_hit(computations)
+    assert color == Color(0.90498, 0.90498, 0.90498)

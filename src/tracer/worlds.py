@@ -2,14 +2,14 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 from .matrices import Matrix
-from .physicals import Light, Hull, Sphere, Material, Intersections
+from .physicals import Light, Hull, Sphere, Material, Intersections, Computations
 from .tuples import Tuple, Color
 
 
 @dataclass
 class World:
     children: list[Hull] = field(default_factory=list)
-    lights: list[lights] = field(default_factory=list)
+    lights: list[Light] = field(default_factory=list)
 
     def __len__(self):
         return len(self.children)
@@ -33,6 +33,14 @@ class World:
             )
         ]
         return World(children, lights)
+
+    def shade_hit(self, computations: Computations) -> Color:
+        colors = []
+        material = computations.hull.material
+
+        for light in self.lights:
+            colors.append(material.lighting(light, computations.point, computations.eye_vector, computations.normal_vector))
+        return sum(colors, start=Color(0, 0, 0))
 
     def intersect(self, ray):
         intersections = []

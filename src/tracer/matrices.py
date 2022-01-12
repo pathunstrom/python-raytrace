@@ -3,11 +3,14 @@ from __future__ import annotations
 from collections import UserList
 from itertools import chain, product
 from math import isclose, cos, sin
-from types import SimpleNamespace
 
 from .shared import EPSILON, number
 from .tuples import Tuple
 
+
+__all__ = [
+    "Matrix"
+]
 
 
 class Matrix(UserList):
@@ -179,13 +182,3 @@ Matrix.identity = Matrix(
     0, 0, 1, 0,
     0, 0, 0, 1
 )
-
-transforms = SimpleNamespace()
-
-
-transforms.translation = Matrix.identity.translate
-transforms.scaling = Matrix.identity.scale
-transforms.rotation_x = Matrix.identity.rotate_x
-transforms.rotation_y = Matrix.identity.rotate_y
-transforms.rotation_z = Matrix.identity.rotate_z
-transforms.shearing = Matrix.identity.shear

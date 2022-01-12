@@ -175,6 +175,20 @@ class Matrix(UserList):
         )
         return transform @ self
 
+    @staticmethod
+    def view(from_point: Tuple, to_point: Tuple, up_vector: Tuple) -> Matrix:
+        forward = (to_point - from_point).normalize()
+        left = forward.cross(up_vector.normalize())
+        true_up = left.cross(forward)
+        orientation = Matrix(
+            left.x, left.y, left.z, 0,
+            true_up.x, true_up.y, true_up.z, 0,
+            -forward.x, -forward.y, -forward.z, 0,
+            0, 0, 0, 1
+        )
+
+        return orientation @ Matrix.identity.translate(-from_point.x, -from_point.y, -from_point.z)
+
 
 Matrix.identity = Matrix(
     1, 0, 0, 0,

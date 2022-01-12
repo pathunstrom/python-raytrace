@@ -7,7 +7,7 @@ from math import pi, sqrt
 
 from pytest import mark
 
-from tracer import transforms, Tuple, Matrix, point
+from tracer import transforms, Tuple, Matrix, point, vector
 
 
 def test_translation():
@@ -187,3 +187,27 @@ def test_chained_transforms_fluent_api():
     _point = point(1, 0, 1)
     transform = Matrix.identity.rotate_x(pi / 2).scale(5, 5, 5).translate(10, 5, 7)
     assert transform * _point == point(15, 0, 7)
+
+
+@mark.parametrize(
+    "from_point, to_point, up_vector, expected_transform",
+    [
+        [point(0, 0, 0), point(0, 0, -1), vector(0, 1, 0), Matrix.identity],
+        [point(0, 0, 0), point(0, 0, 1), vector(0, 1, 0), transforms.scaling(-1, 1, -1)],
+        [point(0, 0, 8), point(0, 0, 0), vector(0, 1, 0), transforms.translation(0, 0, -8)],
+        [
+            point(1, 3, 2),
+            point(4, -2, 8),
+            vector(1, 1, 0),
+            Matrix(
+                -0.50709, 0.50709, 0.67612, -2.36643,
+                0.76772, 0.60609, 0.12122, -2.82843,
+                -0.35857, 0.59761, -0.71714, 0.0,
+                0, 0, 0, 1,
+            )
+        ]
+    ]
+)
+def test_matrix_view(from_point, to_point, up_vector, expected_transform):
+    transform = Matrix.view(from_point, to_point, up_vector)
+    assert transform == expected_transform

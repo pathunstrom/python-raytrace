@@ -1,20 +1,26 @@
 from __future__ import annotations
 
+from functools import partial
+from itertools import product
 from math import tan
+from multiprocessing import Pool
+from os import cpu_count
 
 from tracer.matrices import Matrix
 from tracer.physicals import Ray
-from tracer.tuples import Tuple
+from tracer.renderer import Canvas
+from tracer.tuples import Tuple, Color
+from tracer.worlds import World
 
 
 class Camera:
     """A camera"""
 
-    def __init__(self, horizontal_pixels: int, vertical_pixels: int, field_of_view: int | float):
+    def __init__(self, horizontal_pixels: int, vertical_pixels: int, field_of_view: int | float, transform: Matrix = Matrix.identity):
         self.horizontal_pixels = horizontal_pixels
         self.vertical_pixels = vertical_pixels
         self.field_of_view = field_of_view
-        self.transform = Matrix.identity
+        self.transform = transform
         half_view = tan(field_of_view / 2)
         aspect = horizontal_pixels / vertical_pixels
         if aspect >= 1:
@@ -38,3 +44,21 @@ class Camera:
         direction = (pixel - origin).normalize()
 
         return Ray(origin, direction)
+
+    def _get_pixel(self, world: World, x: int, y: int) -> tuple[int, int, Color]:
+        ray = self.ray_for_pixel(x, y)
+        return x, y, world.color_at(ray)
+
+    def render(self, world) -> Canvas:
+        cpus = max(cpu_count() // 2, 1)
+
+        total_pixels = self.horizontal_pixels * self.vertical_pixels
+        coordinates = product(range(self.horizontal_pixels), range(self.vertical_pixels))
+        pool = Pool(cpus)
+        pixels = pool.starmap(func=partial(self._get_pixel, world), iterable=coordinates, chunksize=total_pixels // cpus)
+
+        canvas = Canvas(self.horizontal_pixels, self.vertical_pixels)
+        for x, y, color in pixels:
+            canvas[x, y] = color
+
+        return canvas

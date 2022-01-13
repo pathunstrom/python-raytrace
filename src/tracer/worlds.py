@@ -17,7 +17,7 @@ class World:
     def __contains__(self, item):
         return item in self.children or item in self.lights
 
-    def color_at(self, ray: Ray):
+    def color_at(self, ray: Ray) -> Color:
         intersections = self.intersect(ray)
         hit = intersections.hit()
         if not hit:

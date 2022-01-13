@@ -2,7 +2,7 @@ from math import pi, isclose, sqrt
 
 from pytest import mark
 
-from tracer import Camera, Matrix, Ray, point, vector
+from tracer import Camera, Color, Matrix, Ray, point, vector, World
 
 
 def test_camera_constructor():
@@ -45,3 +45,10 @@ def test_camera_ray_for_a_pixel(transform, x, y, expected_ray):
     camera.transform = transform
     ray = camera.ray_for_pixel(x, y)
     assert ray == expected_ray
+
+
+def test_camera_render_world():
+    world = World.default()
+    camera = Camera(11, 11, pi / 2, transform=Matrix.view(point(0, 0, -5), point(0, 0, 0), vector(0, 1, 0)))
+    image = camera.render(world)
+    assert image[5, 5] == Color(0.38066, 0.47583, 0.2855)

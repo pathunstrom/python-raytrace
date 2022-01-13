@@ -56,7 +56,8 @@ class Camera:
         coordinates = product(range(self.horizontal_pixels), range(self.vertical_pixels))
         pool = Pool(cpus)
         pixels = pool.starmap(func=partial(self._get_pixel, world), iterable=coordinates, chunksize=total_pixels // cpus)
-
+        pool.close()
+        pool.join()
         canvas = Canvas(self.horizontal_pixels, self.vertical_pixels)
         for x, y, color in pixels:
             canvas[x, y] = color

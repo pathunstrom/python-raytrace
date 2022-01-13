@@ -7,7 +7,7 @@ from tracer import (
     Intersections,
     Ray,
     Sphere,
-    Tuple,
+    Vector,
     transforms,
     Matrix,
     point,
@@ -18,11 +18,11 @@ from tracer import (
 @mark.parametrize(
     "origin,expected",
     [
-        [Tuple.point(0, 0, -5), Intersections((Intersection(4, Sphere()), Intersection(6, Sphere())))],
-        [Tuple.point(0, 1, -5), Intersections((Intersection(5, Sphere()), Intersection(5, Sphere())))],
-        [Tuple.point(0, 2, -5), Intersections()],
-        [Tuple.point(0, 0, 0), Intersections((Intersection(-1, Sphere()), Intersection(1, Sphere())))],
-        [Tuple.point(0, 0, 5), Intersections((Intersection(-6, Sphere()), Intersection(-4, Sphere())))],
+        [Vector.point(0, 0, -5), Intersections((Intersection(4, Sphere()), Intersection(6, Sphere())))],
+        [Vector.point(0, 1, -5), Intersections((Intersection(5, Sphere()), Intersection(5, Sphere())))],
+        [Vector.point(0, 2, -5), Intersections()],
+        [Vector.point(0, 0, 0), Intersections((Intersection(-1, Sphere()), Intersection(1, Sphere())))],
+        [Vector.point(0, 0, 5), Intersections((Intersection(-6, Sphere()), Intersection(-4, Sphere())))],
         [point(0, 0, -5), Intersections((Intersection(4, Sphere()), Intersection(6, Sphere())))],
         [point(0, 1, -5), Intersections((Intersection(5, Sphere()), Intersection(5, Sphere())))],
         [point(0, 2, -5), Intersections()],
@@ -30,7 +30,7 @@ from tracer import (
         [point(0, 0, 5), Intersections((Intersection(-6, Sphere()), Intersection(-4, Sphere())))]
     ]
 )
-def test_sphere_intersection(origin: Tuple, expected: Intersections[Intersection]):
+def test_sphere_intersection(origin: Vector, expected: Intersections[Intersection]):
     ray = Ray(origin, vector(0, 0, 1))
     sphere = Sphere()
     for i in expected:
@@ -64,7 +64,7 @@ def test_ray_transform(ray: Ray, transform: Matrix, expected_ray: Ray):
 
 
 def test_ray_position():
-    ray = Ray(Tuple.point(2, 3, 4), Tuple.vector(1, 0, 0))
+    ray = Ray(Vector.point(2, 3, 4), Vector.vector(1, 0, 0))
     assert ray.position(0) == point(2, 3, 4)
     assert ray.position(1) == point(3, 3, 4)
     assert ray.position(-1) == point(1, 3, 4)

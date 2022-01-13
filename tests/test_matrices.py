@@ -1,6 +1,6 @@
 from math import isclose
 
-from tracer import Matrix, Tuple, EPSILON
+from tracer import Matrix, Vector, EPSILON
 
 
 def test_matrix_4x4():
@@ -113,9 +113,9 @@ def test_matrix_by_tuple():
         0, 0, 0, 1
     )
 
-    _tuple = Tuple(1, 2, 3, 1)
+    _tuple = Vector(1, 2, 3, 1)
 
-    assert matrix * _tuple == Tuple(18, 24, 33, 1)
+    assert matrix * _tuple == Vector(18, 24, 33, 1)
 
 
 def test_matrix_multiplication_identity():

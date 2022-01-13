@@ -5,10 +5,10 @@ from tracer import (
     point,
     Ray,
     Sphere,
-    Tuple,
+    Vector,
 )
 
-vec: Tuple
+vec: Vector
 
 canvas_pixels = 100
 wall_size = 7

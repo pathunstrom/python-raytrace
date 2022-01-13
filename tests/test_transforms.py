@@ -7,7 +7,7 @@ from math import pi, sqrt
 
 from pytest import mark
 
-from tracer import transforms, Tuple, Matrix, point, vector
+from tracer import transforms, Vector, Matrix, point, vector
 
 
 def test_translation():
@@ -21,7 +21,7 @@ def test_translation():
 
 def test_translation_no_effect_on_vectors():
     transform = transforms.translation(5, -3, 2)
-    vector = Tuple.vector(-3, 4, 5)
+    vector = Vector.vector(-3, 4, 5)
 
     assert transform * vector == vector
 
@@ -29,13 +29,13 @@ def test_translation_no_effect_on_vectors():
 data = [
     (
         transforms.scaling(2, 3, 4),
-        Tuple.vector(-4, 6, 8),
-        Tuple.vector(-8, 18, 32)
+        Vector.vector(-4, 6, 8),
+        Vector.vector(-8, 18, 32)
     ),
     (
         Matrix.identity.scale(2, 3, 4),
-        Tuple.vector(-4, 6, 8),
-        Tuple.vector(-8, 18, 32)
+        Vector.vector(-4, 6, 8),
+        Vector.vector(-8, 18, 32)
     ),
     (
         transforms.scaling(2, 3, 4).inverse(),
@@ -131,7 +131,7 @@ data = [
 
 
 @mark.parametrize("transform,_input,expected", data)
-def test_transform(transform, _input: Tuple, expected):
+def test_transform(transform, _input: Vector, expected):
     assert transform * _input == expected
 
 

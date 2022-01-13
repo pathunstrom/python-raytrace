@@ -7,12 +7,12 @@ from tracer import (
     point,
     Ray,
     Sphere,
-    Tuple,
+    Vector,
     Material,
     Light
 )
 
-vec: Tuple
+vec: Vector
 
 canvas_pixels = 300
 wall_size = 7

@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from itertools import count
 from typing import Union
 
-from tracer import Tuple
+from tracer import Vector
 
 number = Union[float, int]
 vector_tuple = tuple[number, number, number]
@@ -10,14 +10,14 @@ vector_tuple = tuple[number, number, number]
 
 @dataclass
 class Environment:
-    gravity: Tuple
-    wind: Tuple
+    gravity: Vector
+    wind: Vector
 
 
 @dataclass
 class Projectile:
-    position: Tuple
-    velocity: Tuple
+    position: Vector
+    velocity: Vector
 
 
 def tick(env: Environment, projectile: Projectile):
@@ -27,8 +27,8 @@ def tick(env: Environment, projectile: Projectile):
 
 
 def main(position: vector_tuple, velocity: vector_tuple, gravity: vector_tuple, wind: vector_tuple):
-    projectile = Projectile(Tuple.point(*position), Tuple.vector(*velocity))
-    environment = Environment(Tuple.vector(*gravity), Tuple.vector(*wind))
+    projectile = Projectile(Vector.point(*position), Vector.vector(*velocity))
+    environment = Environment(Vector.vector(*gravity), Vector.vector(*wind))
     frame = 0
     for frame in count():
         projectile = tick(environment, projectile)

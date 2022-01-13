@@ -6,7 +6,7 @@ from math import sqrt
 from typing import Protocol, Optional
 
 from .shared import number
-from .tuples import Tuple, Color
+from .tuples import Vector, Color
 from .matrices import Matrix
 
 
@@ -19,7 +19,7 @@ class Hull(Protocol):
     def intersects(self, ray: Ray) -> Intersections[Intersection]:
         ...
 
-    def normal_at(self, point: Tuple) -> Tuple:
+    def normal_at(self, point: Vector) -> Vector:
         ...
 
 
@@ -27,9 +27,9 @@ class Hull(Protocol):
 class Computations:
     distance: number
     hull: Hull
-    point: Tuple
-    eye_vector: Tuple
-    normal_vector: Tuple
+    point: Vector
+    eye_vector: Vector
+    normal_vector: Vector
     inside: bool = False
 
 
@@ -67,8 +67,8 @@ class Intersections(UserList):
 
 @dataclass
 class Ray:
-    origin: Tuple
-    direction: Tuple
+    origin: Vector
+    direction: Vector
 
     def position(self, distance):
         return self.origin + self.direction * distance
@@ -91,7 +91,7 @@ class Material:
     specular: int | float = 0.9
     shininess: int | float = 200.0
 
-    def lighting(self, light: Light, surface_position: Tuple, eye_vector: Tuple, surface_normal: Tuple) -> Color:
+    def lighting(self, light: Light, surface_position: Vector, eye_vector: Vector, surface_normal: Vector) -> Color:
         effective_color = self.color * light.intensity
         light_vector = (light.position - surface_position).normalize()
 
@@ -118,7 +118,7 @@ class Material:
 
 @dataclass
 class Sphere:
-    origin: Tuple = Tuple.point(0, 0, 0)
+    origin: Vector = Vector.point(0, 0, 0)
     radius: number = 1
     transform: Matrix = Matrix.identity
     material: Material = Material()
@@ -141,14 +141,14 @@ class Sphere:
 
         return Intersections((Intersection(intersection_1, self), Intersection(intersection_2, self)))
 
-    def normal_at(self, world_point: Tuple) -> Tuple:
+    def normal_at(self, world_point: Vector) -> Vector:
         object_point = self.transform.inverse() * world_point
         object_space_normal = object_point - self.origin
         x, y, z, _ = self.transform.submatrix(3, 3).inverse().transpose() * object_space_normal
-        return Tuple(x, y, z, 0).normalize()
+        return Vector(x, y, z, 0).normalize()
 
 
 @dataclass
 class Light:
-    position: Tuple = Tuple.point(0, 0, 0)
+    position: Vector = Vector.point(0, 0, 0)
     intensity: Color = Color(1, 1, 1)

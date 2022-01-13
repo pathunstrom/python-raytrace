@@ -2,7 +2,7 @@ from math import isclose, sqrt
 
 from pytest import mark, raises
 
-from tracer import Tuple, Color, ZERO_VECTOR, EPSILON, point, vector
+from tracer import Vector, Color, ZERO_VECTOR, EPSILON, point, vector
 
 
 @mark.parametrize(
@@ -12,7 +12,7 @@ from tracer import Tuple, Color, ZERO_VECTOR, EPSILON, point, vector
     )
 )
 def test_tuple_is_point(x, y, z, w):
-    point = Tuple(x, y, z, w)
+    point = Vector(x, y, z, w)
     assert point.w == 1
     assert point.is_point
     assert not point.is_vector
@@ -25,7 +25,7 @@ def test_tuple_is_point(x, y, z, w):
     )
 )
 def test_tuple_is_vector(x, y, z, w):
-    vector = Tuple(x, y, z, w)
+    vector = Vector(x, y, z, w)
     assert vector.w == 0
     assert not vector.is_point
     assert vector.is_vector
@@ -39,7 +39,7 @@ def test_tuple_is_vector(x, y, z, w):
 )
 def test_tuple_point(x, y, z):
     _point = point(x, y, z)
-    assert _point == Tuple(x, y, z, 1)
+    assert _point == Vector(x, y, z, 1)
 
 
 @mark.parametrize(
@@ -50,7 +50,7 @@ def test_tuple_point(x, y, z):
 )
 def test_tuple_vector(x, y, z):
     _vector = vector(x, y, z)
-    assert _vector == Tuple(x, y, z, 0)
+    assert _vector == Vector(x, y, z, 0)
 
 
 @mark.parametrize(
@@ -64,7 +64,7 @@ def test_tuple_vector(x, y, z):
     )
 )
 def test_tuple_addition(left, right, expected):
-    assert Tuple(*left) + Tuple(*right) == Tuple(*expected)
+    assert Vector(*left) + Vector(*right) == Vector(*expected)
 
 
 @mark.parametrize(
@@ -78,7 +78,7 @@ def test_tuple_addition(left, right, expected):
     )
 )
 def test_tuple_subtraction_point_from_point(left, right, expected):
-    assert Tuple.point(*left) - Tuple.point(*right) == vector(*expected)
+    assert Vector.point(*left) - Vector.point(*right) == vector(*expected)
 
 
 def test_tuple_subtraction_vector_from_point():
@@ -94,8 +94,8 @@ def test_tuple_subtraction_from_zero_vector():
 
 
 def test_tuple_negation():
-    a = Tuple(1, -2, 3, -4)
-    assert -a == Tuple(-1, 2, -3, 4)
+    a = Vector(1, -2, 3, -4)
+    assert -a == Vector(-1, 2, -3, 4)
 
 
 @mark.parametrize(
@@ -106,11 +106,11 @@ def test_tuple_negation():
     )
 )
 def test_tuple_multiply_scalars(inputs, scalar, expected_values):
-    assert Tuple(*inputs) * scalar == Tuple(*expected_values)
+    assert Vector(*inputs) * scalar == Vector(*expected_values)
 
 
 def test_tuple_divide_scalars():
-    assert Tuple(1, -2, 3, -4) / 2 == Tuple(0.5, -1, 1.5, -2)
+    assert Vector(1, -2, 3, -4) / 2 == Vector(0.5, -1, 1.5, -2)
 
 
 @mark.parametrize(
@@ -153,17 +153,17 @@ def test_tuple_cross_product():
 
 def test_cant_add_color_to_tuple():
     with raises(ValueError):
-        value = Color(1, 1, 1) + Tuple(2, 3, 4, 5)
+        value = Color(1, 1, 1) + Vector(2, 3, 4, 5)
 
 
 def test_cant_subtract_color_from_tuple():
     with raises(ValueError):
-        value = Color(1, 1, 1) - Tuple(2, 3, 4, 5)
+        value = Color(1, 1, 1) - Vector(2, 3, 4, 5)
 
 
 def test_cant_compare_color_and_tuple():
     with raises(ValueError):
-        assert Color(1, 1, 1) == Tuple(2, 3, 4, 5)
+        assert Color(1, 1, 1) == Vector(2, 3, 4, 5)
 
 
 def test_color():

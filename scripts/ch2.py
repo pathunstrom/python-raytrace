@@ -3,7 +3,7 @@ from itertools import count
 from pathlib import Path
 from typing import Union
 
-from tracer import Tuple, Canvas, Color
+from tracer import Vector, Canvas, Color
 
 
 number = Union[float, int]
@@ -12,14 +12,14 @@ vector_tuple = tuple[number, number, number]
 
 @dataclass
 class Environment:
-    gravity: Tuple
-    wind: Tuple
+    gravity: Vector
+    wind: Vector
 
 
 @dataclass
 class Projectile:
-    position: Tuple
-    velocity: Tuple
+    position: Vector
+    velocity: Vector
 
 
 def tick(env: Environment, projectile: Projectile):
@@ -46,11 +46,11 @@ if __name__ == "__main__":
     main(
         Canvas(900, 550),
         Environment(
-            Tuple.vector(0, -0.1, 0),
-            Tuple.vector(-0.01, 0, 0)
+            Vector.vector(0, -0.1, 0),
+            Vector.vector(-0.01, 0, 0)
         ),
         Projectile(
-            Tuple.point(0, 1, 0),
-            Tuple.vector(1, 1.6, 0) * 5.45
+            Vector.point(0, 1, 0),
+            Vector.vector(1, 1.6, 0) * 5.45
         )
     )

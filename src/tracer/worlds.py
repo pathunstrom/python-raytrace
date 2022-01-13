@@ -3,7 +3,7 @@ from dataclasses import dataclass, field
 
 from .matrices import Matrix
 from .physicals import Light, Hull, Sphere, Material, Intersections, Computations, Ray
-from .tuples import Tuple, Color
+from .tuples import Vector, Color
 
 
 @dataclass
@@ -27,7 +27,7 @@ class World:
 
     @classmethod
     def default(cls) -> World:
-        lights = [Light(Tuple.point(-10, 10, -10), Color(1, 1, 1))]
+        lights = [Light(Vector.point(-10, 10, -10), Color(1, 1, 1))]
         children = [
             Sphere(
                 material=Material(

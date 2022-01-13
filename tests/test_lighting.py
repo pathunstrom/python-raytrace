@@ -5,7 +5,7 @@ from tracer import (
     Sphere,
     point,
     vector,
-    Tuple,
+    Vector,
     Matrix,
     Color,
     Light,
@@ -36,7 +36,7 @@ def surface_position():
 )
 def test_sphere_normal_at(transform, _point, expected_normal):
     sphere = Sphere(transform=transform)
-    normal: Tuple = sphere.normal_at(_point)
+    normal: Vector = sphere.normal_at(_point)
     assert normal == expected_normal
     assert normal == normal.normalize()
 

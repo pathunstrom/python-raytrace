@@ -1,12 +1,12 @@
 from math import pi
 
-from tracer import Canvas, Matrix, Tuple, Color
+from tracer import Canvas, Matrix, Vector, Color
 
 
 canvas = Canvas(200, 200)
 transform = Matrix.identity
-offset = Tuple.vector(0, 80, 0)
-origin = Tuple.vector(100, 100, 0)
+offset = Vector.vector(0, 80, 0)
+origin = Vector.vector(100, 100, 0)
 red = Color(1, 0, 0)
 twelfth = pi / 6
 

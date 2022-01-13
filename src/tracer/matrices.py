@@ -5,7 +5,7 @@ from itertools import chain, product
 from math import isclose, cos, sin
 
 from .shared import EPSILON, number
-from .tuples import Tuple
+from .tuples import Vector
 
 
 __all__ = [
@@ -50,11 +50,11 @@ class Matrix(UserList):
             values.append(sum(v1 * v2 for v1, v2 in zip(self.row(x), other.column(y))))
         return Matrix(*values)
 
-    def __mul__(self, _tuple: Tuple):
+    def __mul__(self, _tuple: Vector):
         if self.size == 4:
-            return Tuple(*(_tuple.dot(row) for row in self.rows))
+            return Vector(*(_tuple.dot(row) for row in self.rows))
         else:
-            return Tuple(*(_tuple.dot(row) for row in self.rows), 0)
+            return Vector(*(_tuple.dot(row) for row in self.rows), 0)
 
     @property
     def rows(self):
@@ -176,7 +176,7 @@ class Matrix(UserList):
         return transform @ self
 
     @staticmethod
-    def view(from_point: Tuple, to_point: Tuple, up_vector: Tuple) -> Matrix:
+    def view(from_point: Vector, to_point: Vector, up_vector: Vector) -> Matrix:
         forward = (to_point - from_point).normalize()
         left = forward.cross(up_vector.normalize())
         true_up = left.cross(forward)

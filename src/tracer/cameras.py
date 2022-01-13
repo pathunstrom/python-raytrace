@@ -9,7 +9,7 @@ from os import cpu_count
 from tracer.matrices import Matrix
 from tracer.physicals import Ray
 from tracer.renderer import Canvas
-from tracer.tuples import Tuple, Color
+from tracer.tuples import Vector, Color
 from tracer.worlds import World
 
 
@@ -39,8 +39,8 @@ class Camera:
         world_y = self.half_height - y_offset
 
         transform = self.transform.inverse()
-        pixel: Tuple = transform * Tuple.point(world_x, world_y, -1)
-        origin: Tuple = transform * Tuple.point(0, 0, 0)
+        pixel: Vector = transform * Vector.point(world_x, world_y, -1)
+        origin: Vector = transform * Vector.point(0, 0, 0)
         direction = (pixel - origin).normalize()
 
         return Ray(origin, direction)

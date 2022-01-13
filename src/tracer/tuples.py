@@ -41,7 +41,7 @@ def hadamard_product(self, other):
     return type(self)(*(left * right for left, right in zip(self, other)))
 
 
-class Tuple(NamedTuple):
+class Vector(NamedTuple):
     x: Union[float, int]
     y: Union[float, int]
     z: Union[float, int]
@@ -50,7 +50,7 @@ class Tuple(NamedTuple):
     def cross(self, other):
         if self.w != 0 or other.w != 0:
             raise NotImplementedError("Only 3 dimensional cross products supported.")
-        return Tuple(
+        return Vector(
             self.y * other.z - self.z * other.y,
             self.z * other.x - self.x * other.z,
             self.x * other.y - self.y * other.x,
@@ -72,19 +72,19 @@ class Tuple(NamedTuple):
     def magnitude(self) -> Union[float, int]:
         return sqrt(sum(x ** 2 for x in self))
 
-    def normalize(self) -> Tuple:
+    def normalize(self) -> Vector:
         magnitude = self.magnitude
-        return Tuple(*(v / magnitude for v in self))
+        return Vector(*(v / magnitude for v in self))
 
-    def reflect(self, normal) -> Tuple:
+    def reflect(self, normal) -> Vector:
         return self - normal * 2 * self.dot(normal)
 
     @classmethod
-    def point(cls, x, y, z) -> Tuple:
+    def point(cls, x, y, z) -> Vector:
         return cls(x, y, z, 1)
 
     @classmethod
-    def vector(cls, x, y, z) -> Tuple:
+    def vector(cls, x, y, z) -> Vector:
         return cls(x, y, z, 0)
 
     def __add__(self, other):
@@ -99,7 +99,7 @@ class Tuple(NamedTuple):
     def __neg__(self):
         return type(self)(*(-x for x in self))
 
-    def __sub__(self, other) -> Tuple:
+    def __sub__(self, other) -> Vector:
         return subtract(self, other)
 
     def __truediv__(self, scalar):
@@ -130,4 +130,4 @@ class Color(NamedTuple):
         return scalar_multiplication(self, scalar)
 
 
-ZERO_VECTOR = Tuple(0, 0, 0, 0)
+ZERO_VECTOR = Vector(0, 0, 0, 0)

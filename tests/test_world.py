@@ -68,6 +68,21 @@ def test_world_shade_hit_inside():
     assert color == Color(0.90498, 0.90498, 0.90498)
 
 
+def test_world_shade_given_shadow():
+    world = World(
+        [
+            Sphere(),
+            Sphere(transform=transforms.translation(0, 0, 10))
+        ],
+        Light(point(0, 0, -10))
+    )
+
+    ray = Ray(point(0, 0, 5), vector(0, 0, 1))
+    intersection = Intersection(4, world.children[1])
+    computations = intersection.prepare_computations(ray)
+    assert world.shade_hit(computations) == Color(0.1, 0.1, 0.1)
+
+
 def test_world_color_at_no_hit():
     world = World.default()
     ray = Ray(point(0, 0, -5), vector(0, 1, 0))

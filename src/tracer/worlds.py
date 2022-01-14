@@ -43,11 +43,15 @@ class World:
         return World(children, light)
 
     def shade_hit(self, computations: Computations) -> Color:
-        colors = []
         material = computations.hull.material
-
-        colors.append(material.lighting(self.light, computations.point, computations.eye_vector, computations.normal_vector))
-        return sum(colors, start=Color(0, 0, 0))
+        shadowed = self.is_shadowed(computations.over_point)
+        return material.lighting(
+            self.light,
+            computations.point,
+            computations.eye_vector,
+            computations.normal_vector,
+            shadowed
+        )
 
     def intersect(self, ray) -> Intersections:
         intersections = []

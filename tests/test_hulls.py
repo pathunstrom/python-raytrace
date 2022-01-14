@@ -3,6 +3,7 @@ from __future__ import annotations
 from pytest import mark
 
 from tracer import (
+    EPSILON,
     Intersection,
     Intersections,
     Ray,
@@ -101,6 +102,18 @@ def test_intersection_prepare_computations_inside_hit():
     assert computations.eye_vector == vector(0, 0, -1)
     assert computations.normal_vector == vector(0, 0, -1)
     assert computations.inside
+
+
+def test_intersection_prepare_computations_over_point():
+    ray = Ray(point(0, 0, -5), vector(0, 0, 1))
+    shape = Sphere(
+        transform=transforms.translation(0, 0, 1)
+    )
+    intersection = Intersection(5, shape)
+    computations = intersection.prepare_computations(ray)
+
+    assert computations.over_point.z < -EPSILON/2
+    assert computations.point.z > computations.over_point.z
 
 
 def test_intersections():

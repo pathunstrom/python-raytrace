@@ -41,19 +41,17 @@ world = World(
             material=Material(color=Color(1, 0.6, 0.6), diffuse=0.9, specular=0.65)
         )
     ],
-    [
-        Light(point(-10, 10, -10), Color(1, 1, 1))
-    ]
+    Light(point(-10, 10, -10), Color(1, 1, 1))
 )
 
 camera = Camera(
     # 96, 54,
     640, 360,
-    pi / 3,
-    Matrix.view(point(1.5, 3.5, -3), point(0, 1.5, 0), vector(0, 1, 0))
+    pi / 5,
+    Matrix.view(point(-4, 2, -4), point(-0.5, 1, 0), vector(0, 1, 0))
 )
 
 if __name__ == "__main__":
     canvas = camera.render(world)
 
-    canvas.save("ch7-4.ppm")
+    canvas.save("ch7-7.ppm")

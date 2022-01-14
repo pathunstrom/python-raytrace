@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from math import sqrt
 from typing import Protocol, Optional
 
-from .shared import number
+from .shared import number, EPSILON
 from .tuples import Vector, Color
 from .matrices import Matrix
 
@@ -30,6 +30,7 @@ class Computations:
     point: Vector
     eye_vector: Vector
     normal_vector: Vector
+    over_point: Vector
     inside: bool = False
 
 
@@ -46,6 +47,7 @@ class Intersection:
         if normal_vector.dot(eye_vector) < 0:
             inside = True
             normal_vector = -normal_vector
+        over_point = point + normal_vector * EPSILON
 
         return Computations(
             self.distance,
@@ -53,6 +55,7 @@ class Intersection:
             point,
             eye_vector,
             normal_vector,
+            over_point,
             inside
         )
 

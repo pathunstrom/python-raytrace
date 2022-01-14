@@ -1,3 +1,5 @@
+from pytest import mark
+
 from tracer import (
     Color,
     Intersection,
@@ -87,3 +89,17 @@ def test_world_color_at_with_negative_intersection():
     ray = Ray(point(0, 0, 0.75), vector(0, 0, -1))
     color = world.color_at(ray)
     assert color == world.children[1].material.color
+
+
+@mark.parametrize(
+    "point, expected",
+    [
+        (point(0, 10, 0), False),
+        (point(10, -10, 10), True),
+        (point(-20, 20, -20), False),
+        (point(-2, 2, -2), False)
+    ]
+)
+def test_world_is_shadowed(point, expected):
+    world = World.default()
+    assert world.is_shadowed(point) == expected

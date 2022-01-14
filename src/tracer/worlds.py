@@ -49,8 +49,18 @@ class World:
         colors.append(material.lighting(self.light, computations.point, computations.eye_vector, computations.normal_vector))
         return sum(colors, start=Color(0, 0, 0))
 
-    def intersect(self, ray):
+    def intersect(self, ray) -> Intersections:
         intersections = []
         for hull in self.children:
             intersections.extend(hull.intersects(ray))
         return Intersections(sorted(intersections, key=lambda x: x.distance))
+
+    def is_shadowed(self, point) -> bool:
+        to_light = self.light.position - point
+        distance = to_light.magnitude
+        ray = Ray(point, to_light.normalize())
+        intersections = self.intersect(ray)
+        hit = intersections.hit()
+        if hit is not None and hit.distance < distance:
+            return True
+        return False

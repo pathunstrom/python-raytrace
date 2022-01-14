@@ -19,7 +19,6 @@ wall_size = 7
 transform = Matrix.identity
 file_name = "multiprocessed.ppm"
 
-surface_z = 10
 pixel_size = wall_size / canvas_pixels
 half = wall_size / 2
 canvas = Canvas(canvas_pixels, canvas_pixels)
@@ -28,6 +27,8 @@ ray_origin = point(0, 0, -5)
 
 sphere = Sphere(transform=transform, material=Material(color=Color(0.7, 0.3, 0.7), ambient=.2, shininess=2, diffuse=.7))
 light = Light(point(-10, 10, -10), Color(1, 1, 1))
+
+surface_z = 10
 
 
 def calculate_ray(x, y):

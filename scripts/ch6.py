@@ -1,4 +1,4 @@
-import time
+from time import monotonic
 
 from tracer import (
     Canvas,
@@ -14,7 +14,7 @@ from tracer import (
 
 vec: Vector
 
-canvas_pixels = 300
+canvas_pixels =300
 wall_size = 7
 transform = Matrix.identity
 file_name = "singlethreaded.ppm"
@@ -30,7 +30,7 @@ light = Light(point(-10, 10, -10), Color(1, 1, 1))
 
 surface_z = 10
 
-start_time = time.monotonic()
+start_time = monotonic()
 
 for y in range(canvas_pixels):
     world_y = half - (pixel_size * y)
@@ -50,4 +50,4 @@ for y in range(canvas_pixels):
 
 canvas.save(file_name)
 
-print(f"Run time: {time.monotonic() - start_time} seconds")
+print(f"Run time: {monotonic() - start_time} seconds")

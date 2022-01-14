@@ -91,14 +91,14 @@ def test_sphere_material_set():
 
 
 @mark.parametrize(
-    "eye_vector, surface_normal, light, expected_color",
+    "eye_vector, surface_normal, light, in_shadow, expected_color",
     [
-        [vector(0, 0, -1), vector(0, 0, -1), Light(point(0, 0, -10), Color(1, 1, 1)), Color(1.9, 1.9, 1.9)],
-        [vector(0, sqrt(2)/2, sqrt(2)/2), vector(0, 0, -1), Light(point(0, 0, -10), Color(1, 1, 1)), Color(1, 1, 1)],
-        [vector(0, 0, -1), vector(0, 0, -1), Light(point(0, 10, -10), Color(1, 1, 1)), Color(0.7364, 0.7364, 0.7364)],
-        [vector(0, -sqrt(2)/2, -sqrt(2)/2), vector(0, 0, -1), Light(point(0, 10, -10), Color(1, 1, 1)), Color(1.6364, 1.6364, 1.6364)],
-        [vector(0, 0, -1), vector(0, 0, -1), Light(point(0, 0, 10), Color(1, 1, 1)), Color(0.1, 0.1, 0.1)],
+        [vector(0, 0, -1), vector(0, 0, -1), Light(point(0, 0, -10), Color(1, 1, 1)), False, Color(1.9, 1.9, 1.9)],
+        [vector(0, sqrt(2)/2, sqrt(2)/2), vector(0, 0, -1), Light(point(0, 0, -10), Color(1, 1, 1)), False, Color(1, 1, 1)],
+        [vector(0, 0, -1), vector(0, 0, -1), Light(point(0, 10, -10), Color(1, 1, 1)), False, Color(0.7364, 0.7364, 0.7364)],
+        [vector(0, -sqrt(2)/2, -sqrt(2)/2), vector(0, 0, -1), Light(point(0, 10, -10), Color(1, 1, 1)), False, Color(1.6364, 1.6364, 1.6364)],
+        [vector(0, 0, -1), vector(0, 0, -1), Light(point(0, 0, 10), Color(1, 1, 1)), False, Color(0.1, 0.1, 0.1)],
     ]
 )
-def test_material_lighting(surface_material, surface_position, eye_vector, surface_normal, light, expected_color):
-    assert surface_material.lighting(light, surface_position, eye_vector, surface_normal) == expected_color
+def test_material_lighting(surface_material, surface_position, eye_vector, surface_normal, light, in_shadow, expected_color):
+    assert surface_material.lighting(light, surface_position, eye_vector, surface_normal, in_shadow) == expected_color

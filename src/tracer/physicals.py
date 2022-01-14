@@ -91,7 +91,7 @@ class Material:
     specular: int | float = 0.9
     shininess: int | float = 200.0
 
-    def lighting(self, light: Light, surface_position: Vector, eye_vector: Vector, surface_normal: Vector) -> Color:
+    def lighting(self, light: Light, surface_position: Vector, eye_vector: Vector, surface_normal: Vector, in_shadow: bool = False) -> Color:
         effective_color = self.color * light.intensity
         light_vector = (light.position - surface_position).normalize()
 
@@ -99,7 +99,7 @@ class Material:
 
         light_v_dot_surface_normal = light_vector.dot(surface_normal)
 
-        if light_v_dot_surface_normal < 0:
+        if light_v_dot_surface_normal < 0 or in_shadow:
             return ambient + black + black
 
         diffuse = effective_color * self.diffuse * light_v_dot_surface_normal

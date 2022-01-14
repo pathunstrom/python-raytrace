@@ -15,7 +15,7 @@ from tracer import (
 def test_world():
     world = World()
     assert len(world) == 0
-    assert len(world.lights) == 0
+    assert world.light is None
 
 
 def test_default_world():
@@ -31,7 +31,7 @@ def test_default_world():
         transform=transforms.scaling(0.5, 0.5, 0.5)
     )
     world = World.default()
-    assert world.lights[0] == light
+    assert world.light == light
     assert sphere_1 in world
     assert sphere_2 in world
 
@@ -57,7 +57,7 @@ def test_world_shade_hit():
 
 def test_world_shade_hit_inside():
     world = World.default()
-    world.lights[0].position = point(0, 0.25, 0)
+    world.light.position = point(0, 0.25, 0)
     ray = Ray(point(0, 0, 0), vector(0, 0, 1))
     shape = world.children[1]
     intersection = Intersection(0.5, shape)

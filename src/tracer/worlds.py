@@ -9,13 +9,13 @@ from .tuples import Vector, Color
 @dataclass
 class World:
     children: list[Hull] = field(default_factory=list)
-    lights: list[Light] = field(default_factory=list)
+    light: Light = None
 
     def __len__(self):
         return len(self.children)
 
     def __contains__(self, item):
-        return item in self.children or item in self.lights
+        return item in self.children or item == self.light
 
     def color_at(self, ray: Ray) -> Color:
         intersections = self.intersect(ray)
@@ -27,7 +27,7 @@ class World:
 
     @classmethod
     def default(cls) -> World:
-        lights = [Light(Vector.point(-10, 10, -10), Color(1, 1, 1))]
+        light = Light(Vector.point(-10, 10, -10), Color(1, 1, 1))
         children = [
             Sphere(
                 material=Material(
@@ -40,14 +40,13 @@ class World:
                 transform=Matrix.identity.scale(0.5, 0.5, 0.5)
             )
         ]
-        return World(children, lights)
+        return World(children, light)
 
     def shade_hit(self, computations: Computations) -> Color:
         colors = []
         material = computations.hull.material
 
-        for light in self.lights:
-            colors.append(material.lighting(light, computations.point, computations.eye_vector, computations.normal_vector))
+        colors.append(material.lighting(self.light, computations.point, computations.eye_vector, computations.normal_vector))
         return sum(colors, start=Color(0, 0, 0))
 
     def intersect(self, ray):

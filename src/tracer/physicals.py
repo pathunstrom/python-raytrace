@@ -126,10 +126,19 @@ class AbstractHull:
     material: Material = Material()
 
     def _intersects(self, ray: Ray) -> Intersections[Intersection]:
-        raise NotImplemented
+        raise NotImplementedError
 
     def intersects(self, ray: Ray) -> Intersections:
         return self._intersects(ray.transform(self.transform.inverse()))
+
+    def _normal_at(self, point: Vector) -> Vector:
+        raise NotImplementedError
+
+    def normal_at(self, point: Vector) -> Vector:
+        local_point = self.transform.inverse() * point
+        local_normal = self._normal_at(local_point)
+        x, y, z, _ = self.transform.inverse().transpose() * local_normal
+        return Vector.vector(x, y, z).normalize()
 
 
 @dataclass
@@ -153,11 +162,8 @@ class Sphere(AbstractHull):
 
         return Intersections((Intersection(intersection_1, self), Intersection(intersection_2, self)))
 
-    def normal_at(self, world_point: Vector) -> Vector:
-        object_point = self.transform.inverse() * world_point
-        object_space_normal = object_point - self.origin
-        x, y, z, _ = self.transform.submatrix(3, 3).inverse().transpose() * object_space_normal
-        return Vector(x, y, z, 0).normalize()
+    def _normal_at(self, object_point: Vector) -> Vector:
+        return object_point - self.origin
 
 
 @dataclass

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from math import pi, sqrt
 from unittest.mock import Mock
 
 from pytest import mark
@@ -7,7 +8,6 @@ from pytest import mark
 from tracer import (
     AbstractHull,
     EPSILON,
-    Hull,
     Intersection,
     Intersections,
     Ray,
@@ -22,7 +22,10 @@ from tracer import (
 
 
 class HullTest(AbstractHull):
-    pass
+
+    def _normal_at(self, point: Vector) -> Vector:
+        x, y, z, _ = point
+        return vector(x, y, z)
 
 
 hull_types = [
@@ -92,6 +95,16 @@ def test_hull_intersect_translated(hull_type: type):
     _ = shape.intersects(ray)
     shape._intersects.assert_called_once()
     shape._intersects.assert_called_with(Ray(point(-5, 0, -5), vector(0, 0, 1)))
+
+
+def test_hull_normal_at_translated():
+    shape = HullTest(transform=transforms.translation(0, 1, 0))
+    assert shape.normal_at(point(0, 1.70711, -0.70711)) == vector(0, 0.70711, -0.70711)
+
+
+def test_hull_normal_at_transformed():
+    shape = HullTest(transform=transforms.rotation_z(pi / 5).scale(1, 0.5, 1))
+    assert shape.normal_at(point(0, sqrt(2)/2, -sqrt(2)/2)) == vector(0, 0.97014, -0.24254)
 
 
 @mark.parametrize(

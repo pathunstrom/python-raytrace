@@ -271,3 +271,9 @@ def test_intersections_transformed(transform: Matrix, expected: Intersections[In
     assert len(intersections) == len(expected)
     for actual, expected in zip(intersections, expected):
         assert actual == expected
+
+
+@mark.parametrize("_input", [point(0, 0, 0), point(10, 0, -10), point(-5, 0, 150)])
+def test_plane__normal(_input):
+    plane = Plane()
+    assert plane._normal_at(_input) == vector(0, 1, 0)

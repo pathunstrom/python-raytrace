@@ -168,7 +168,9 @@ class Sphere(AbstractHull):
 
 @dataclass
 class Plane(AbstractHull):
-    pass
+
+    def _normal_at(self, point: Vector) -> Vector:
+        return Vector.vector(0, 1, 0)
 
 
 @dataclass

@@ -16,6 +16,7 @@ from tracer import (
     transforms,
     Material,
     Matrix,
+    Plane,
     point,
     vector
 )
@@ -30,7 +31,8 @@ class HullTest(AbstractHull):
 
 hull_types = [
     HullTest,
-    Sphere
+    Sphere,
+    Plane,
 ]
 
 
@@ -122,16 +124,33 @@ def test_hull_normal_at_transformed():
         [point(0, 0, 5), Intersections((Intersection(-6, Sphere()), Intersection(-4, Sphere())))]
     ]
 )
-def test_sphere_intersection(origin: Vector, expected: Intersections[Intersection]):
+def test_sphere__intersection(origin: Vector, expected: Intersections[Intersection]):
     ray = Ray(origin, vector(0, 0, 1))
     sphere = Sphere()
     for i in expected:
         i.hull = sphere  # We need the expected sphere to be the original sphere.
-    intersections = sphere.intersects(ray)
+    intersections = sphere._intersects(ray)
     assert len(intersections) == len(expected)
     for intersection, expected_intersection in zip(intersections, expected):
         assert intersection.distance == expected_intersection.distance
         assert intersection.hull == expected_intersection.hull
+
+
+@mark.parametrize(
+    "transform,_point,expected_normal",
+    [
+        [Matrix.identity, point(1, 0, 0), vector(1, 0, 0)],
+        [Matrix.identity, point(0, 1, 0), vector(0, 1, 0)],
+        [Matrix.identity, point(0, 0, 1), vector(0, 0, 1)],
+        [Matrix.identity, point(sqrt(3) / 3, sqrt(3) / 3, sqrt(3) / 3), vector(sqrt(3) / 3, sqrt(3) / 3, sqrt(3) / 3)],
+        [Matrix.identity.translate(0, 1, 0), point(0, 1.70711, -0.70711), vector(0, 1.70711, -0.70711)],
+        [Matrix.identity.rotate_z(pi / 5).scale(1, 0.5, 1), point(0, sqrt(2) / 2, -sqrt(2) / 2), vector(0, sqrt(2) / 2, -sqrt(2) / 2)]
+    ]
+)
+def test_sphere_normal_at(transform, _point, expected_normal):
+    sphere = Sphere(transform=transform)
+    normal: Vector = sphere._normal_at(_point)
+    assert normal == expected_normal
 
 
 def test_create_ray():
@@ -252,22 +271,3 @@ def test_intersections_transformed(transform: Matrix, expected: Intersections[In
     assert len(intersections) == len(expected)
     for actual, expected in zip(intersections, expected):
         assert actual == expected
-
-
-def test_sphere_default_transform():
-    assert Sphere().transform == Matrix.identity
-
-
-def test_sphere_change_transform():
-    transform = transforms.translation(2, 3, 4)
-    sphere = Sphere()
-    sphere.transform = transform
-    assert sphere.transform == transform
-
-
-def test_sphere_initialize_transform():
-    transform = transforms.shearing(1, 2, 3, 4, 5, 6)
-    sphere = Sphere(transform=transform)
-    assert sphere.transform == transform
-
-

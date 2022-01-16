@@ -167,6 +167,11 @@ class Sphere(AbstractHull):
 
 
 @dataclass
+class Plane(AbstractHull):
+    pass
+
+
+@dataclass
 class Light:
     position: Vector = Vector.point(0, 0, 0)
     intensity: Color = Color(1, 1, 1)

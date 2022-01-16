@@ -120,10 +120,14 @@ class Material:
 
 
 @dataclass
-class Sphere:
+class AbstractHull:
+    transform: Matrix = Matrix.identity
+
+
+@dataclass
+class Sphere(AbstractHull):
     origin: Vector = Vector.point(0, 0, 0)
     radius: number = 1
-    transform: Matrix = Matrix.identity
     material: Material = Material()
 
     def intersects(self, ray: Ray) -> Intersections[Intersection]:

@@ -3,6 +3,7 @@ from __future__ import annotations
 from pytest import mark
 
 from tracer import (
+    AbstractHull,
     EPSILON,
     Intersection,
     Intersections,
@@ -10,10 +11,43 @@ from tracer import (
     Sphere,
     Vector,
     transforms,
+    Material,
     Matrix,
     point,
     vector
 )
+
+
+class HullTest(AbstractHull):
+    pass
+
+
+hull_types = [
+    HullTest,
+    Sphere
+]
+
+
+@mark.parametrize(
+    "hull_type",
+    hull_types
+)
+def test_hull_has_default_transform(hull_type: type):
+    shape = hull_type()
+    assert shape.transform == Matrix.identity
+
+
+@mark.parametrize("hull_type", hull_types)
+def test_hull_assign_transform(hull_type: type):
+    shape = hull_type()
+    shape.transform = transforms.translation(2, 3, 4)
+    assert shape.transform == transforms.translation(2, 3, 4)
+
+
+@mark.parametrize("hull_type", hull_types)
+def test_hull_instantiate_with_transform(hull_type: type):
+    shape = hull_type(transform=transforms.translation(1, 2, 3))
+    assert shape.transform == transforms.translation(1, 2, 3)
 
 
 @mark.parametrize(

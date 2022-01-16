@@ -125,15 +125,19 @@ class AbstractHull:
     transform: Matrix = Matrix.identity
     material: Material = Material()
 
+    def _intersects(self, ray: Ray) -> Intersections[Intersection]:
+        raise NotImplemented
+
+    def intersects(self, ray: Ray) -> Intersections:
+        return self._intersects(ray.transform(self.transform.inverse()))
+
 
 @dataclass
 class Sphere(AbstractHull):
     origin: Vector = Vector.point(0, 0, 0)
     radius: number = 1
 
-    def intersects(self, ray: Ray) -> Intersections[Intersection]:
-        ray = ray.transform(self.transform.inverse())
-
+    def _intersects(self, ray: Ray) -> Intersections[Intersection]:
         sphere_to_ray = ray.origin - self.origin
 
         a = ray.direction.dot(ray.direction)

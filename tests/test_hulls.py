@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from unittest.mock import Mock
+
 from pytest import mark
 
 from tracer import (
@@ -70,6 +72,26 @@ def test_hull_instantiate_with_material(hull_type: type):
     material = Material(ambient=1)
     shape = hull_type(material=material)
     assert shape.material == material
+
+
+@mark.parametrize("hull_type", hull_types)
+def test_hull_intersect_scaled(hull_type: type):
+    shape = hull_type(transform=transforms.scaling(2, 2, 2))
+    shape._intersects = Mock()
+    ray = Ray(point(0, 0, -5), vector(0, 0, 1))
+    intersections = shape.intersects(ray)
+    shape._intersects.assert_called_once()
+    shape._intersects.assert_called_with(Ray(point(0, 0, -2.5), vector(0, 0, 0.5)))
+
+
+@mark.parametrize("hull_type", hull_types)
+def test_hull_intersect_translated(hull_type: type):
+    shape = hull_type(transform=transforms.translation(5, 0, 0))
+    shape._intersects = Mock()
+    ray = Ray(point(0, 0, -5), vector(0, 0, 1))
+    _ = shape.intersects(ray)
+    shape._intersects.assert_called_once()
+    shape._intersects.assert_called_with(Ray(point(-5, 0, -5), vector(0, 0, 1)))
 
 
 @mark.parametrize(

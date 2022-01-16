@@ -1,5 +1,5 @@
 from .shared import *
-from .physicals import Intersection, Intersections, Ray, Sphere, Light, Material, AbstractHull
+from .physicals import Intersection, Intersections, Ray, Sphere, Light, Material, AbstractHull, Hull
 from .matrices import Matrix
 from .renderer import Canvas
 from .tuples import Vector, Color, ZERO_VECTOR

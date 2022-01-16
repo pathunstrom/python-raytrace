@@ -14,6 +14,7 @@ black = Color(0, 0, 0)
 
 
 class Hull(Protocol):
+    transform: Matrix
     material: Material
 
     def intersects(self, ray: Ray) -> Intersections[Intersection]:
@@ -122,13 +123,13 @@ class Material:
 @dataclass
 class AbstractHull:
     transform: Matrix = Matrix.identity
+    material: Material = Material()
 
 
 @dataclass
 class Sphere(AbstractHull):
     origin: Vector = Vector.point(0, 0, 0)
     radius: number = 1
-    material: Material = Material()
 
     def intersects(self, ray: Ray) -> Intersections[Intersection]:
         ray = ray.transform(self.transform.inverse())

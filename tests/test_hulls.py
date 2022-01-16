@@ -5,6 +5,7 @@ from pytest import mark
 from tracer import (
     AbstractHull,
     EPSILON,
+    Hull,
     Intersection,
     Intersections,
     Ray,
@@ -48,6 +49,27 @@ def test_hull_assign_transform(hull_type: type):
 def test_hull_instantiate_with_transform(hull_type: type):
     shape = hull_type(transform=transforms.translation(1, 2, 3))
     assert shape.transform == transforms.translation(1, 2, 3)
+
+
+@mark.parametrize("hull_type", hull_types)
+def test_hull_default_material(hull_type: type):
+    shape = hull_type()
+    assert shape.material == Material()
+
+
+@mark.parametrize("hull_type", hull_types)
+def test_hull_assign_material(hull_type: type):
+    shape = hull_type()
+    material = Material(ambient=1)
+    shape.material = material
+    assert shape.material == material
+
+
+@mark.parametrize("hull_type", hull_types)
+def test_hull_instantiate_with_material(hull_type: type):
+    material = Material(ambient=1)
+    shape = hull_type(material=material)
+    assert shape.material == material
 
 
 @mark.parametrize(

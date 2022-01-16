@@ -277,3 +277,18 @@ def test_intersections_transformed(transform: Matrix, expected: Intersections[In
 def test_plane__normal(_input):
     plane = Plane()
     assert plane._normal_at(_input) == vector(0, 1, 0)
+
+
+@mark.parametrize(
+    "_input,expected",
+    [
+        [Ray(point(0, 10, 0), vector(0, 0, 1)), Intersections()],
+        [Ray(point(0, 0, 0), vector(0, 0, 1)), Intersections()],
+        [Ray(point(0, 1, 0), vector(0, -1, 0)), Intersections((Intersection(1, Plane()),))],
+        [Ray(point(0, -1, 0), vector(0, 1, 0)), Intersections((Intersection(1, Plane()),))]
+    ]
+)
+def test_plane__intersects(_input: Ray, expected: Intersections[Intersection]):
+    plane = Plane()
+    intersections = plane._intersects(_input)
+    assert intersections == expected

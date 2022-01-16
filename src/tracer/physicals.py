@@ -169,6 +169,11 @@ class Sphere(AbstractHull):
 @dataclass
 class Plane(AbstractHull):
 
+    def _intersects(self, ray: Ray) -> Intersections[Intersection]:
+        if abs(ray.direction.y) < EPSILON:
+            return Intersections()
+        return Intersections((Intersection((-ray.origin.y) / ray.direction.y, self),))
+
     def _normal_at(self, point: Vector) -> Vector:
         return Vector.vector(0, 1, 0)
 

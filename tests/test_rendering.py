@@ -12,7 +12,7 @@ def test_create_canvas():
 def test_set_pixel():
     canvas = Canvas(10, 20)
     canvas[2, 3] = RED
-    assert canvas[(2, 3)] == BLACK
+    assert canvas[(2, 3)] == RED
 
 
 def test_save_canvas_headers(tmp_path):

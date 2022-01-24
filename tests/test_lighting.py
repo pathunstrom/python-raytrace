@@ -7,6 +7,8 @@ from tracer import (
     Color,
     Light,
     Material,
+    WHITE,
+    Vector
 )
 
 
@@ -32,7 +34,7 @@ def test_vector_reflect(_vector, normal, expected):
 
 
 def test_point_light():
-    intensity = Color(1, 1, 1)
+    intensity = WHITE
     position = point(0, 0, 0)
     light = Light(position, intensity)
     assert light.position == position
@@ -41,7 +43,7 @@ def test_point_light():
 
 def test_material():
     material = Material()
-    assert material.color == Color(1, 1, 1)
+    assert material.color == WHITE
     assert material.ambient == 0.1
     assert material.diffuse == 0.9
     assert material.specular == 0.9
@@ -51,12 +53,15 @@ def test_material():
 @mark.parametrize(
     "eye_vector, surface_normal, light, in_shadow, expected_color",
     [
-        [vector(0, 0, -1), vector(0, 0, -1), Light(point(0, 0, -10), Color(1, 1, 1)), False, Color(1.9, 1.9, 1.9)],
-        [vector(0, sqrt(2)/2, sqrt(2)/2), vector(0, 0, -1), Light(point(0, 0, -10), Color(1, 1, 1)), False, Color(1, 1, 1)],
-        [vector(0, 0, -1), vector(0, 0, -1), Light(point(0, 10, -10), Color(1, 1, 1)), False, Color(0.7364, 0.7364, 0.7364)],
-        [vector(0, -sqrt(2)/2, -sqrt(2)/2), vector(0, 0, -1), Light(point(0, 10, -10), Color(1, 1, 1)), False, Color(1.6364, 1.6364, 1.6364)],
-        [vector(0, 0, -1), vector(0, 0, -1), Light(point(0, 0, 10), Color(1, 1, 1)), False, Color(0.1, 0.1, 0.1)],
+        [vector(0, 0, -1), vector(0, 0, -1), Light(point(0, 0, -10), WHITE), False, Color(1.9, 1.9, 1.9)],
+        [vector(0, sqrt(2)/2, sqrt(2)/2), vector(0, 0, -1), Light(point(0, 0, -10), WHITE), False, WHITE],
+        [vector(0, 0, -1), vector(0, 0, -1), Light(point(0, 10, -10), WHITE), False, Color(0.7364, 0.7364, 0.7364)],
+        [vector(0, -sqrt(2)/2, -sqrt(2)/2), vector(0, 0, -1), Light(point(0, 10, -10), WHITE), False, Color(1.6364, 1.6364, 1.6364)],
+        [vector(0, 0, -1), vector(0, 0, -1), Light(point(0, 0, 10), WHITE), False, Color(0.1, 0.1, 0.1)],
     ]
 )
-def test_material_lighting(surface_material, surface_position, eye_vector, surface_normal, light, in_shadow, expected_color):
+def test_material_lighting(
+        surface_material, surface_position, eye_vector: Vector, surface_normal: Vector,
+        light: Light, in_shadow: bool, expected_color: Color
+):
     assert surface_material.lighting(light, surface_position, eye_vector, surface_normal, in_shadow) == expected_color

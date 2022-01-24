@@ -1,6 +1,7 @@
 from pytest import mark
 
 from tracer import (
+    BLACK,
     Color,
     Intersection,
     Light,
@@ -10,6 +11,7 @@ from tracer import (
     Sphere,
     transforms,
     vector,
+    WHITE,
     World,
 )
 
@@ -21,7 +23,7 @@ def test_world():
 
 
 def test_default_world():
-    light = Light(point(-10, 10, -10), Color(1, 1, 1))
+    light = Light(point(-10, 10, -10), WHITE)
     sphere_1 = Sphere(
         material=Material(
             color=Color(0.8, 1.0, 0.6),
@@ -87,7 +89,7 @@ def test_world_color_at_no_hit():
     world = World.default()
     ray = Ray(point(0, 0, -5), vector(0, 1, 0))
     color = world.color_at(ray)
-    assert color == Color(0, 0, 0)
+    assert color == BLACK
 
 
 def test_world_color_at_hit():

@@ -2,8 +2,14 @@ from math import isclose, sqrt
 
 from pytest import mark, raises
 
-from tracer import Vector, Color, ZERO_VECTOR, EPSILON, point, vector
-
+from tracer import (
+    Vector,
+    Color,
+    ZERO_VECTOR,
+    EPSILON,
+    point,
+    vector,
+)
 
 @mark.parametrize(
     "x, y, z, w",

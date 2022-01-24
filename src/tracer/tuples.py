@@ -7,6 +7,18 @@ from typing import Union, NamedTuple
 from tracer.shared import EPSILON
 
 
+__all__ = [
+    "Vector",
+    "Color",
+    "ZERO_VECTOR",
+    "RED",
+    "GREEN",
+    "BLUE",
+    "BLACK",
+    "WHITE"
+]
+
+
 def length_protection(function):
 
     @wraps(function)
@@ -131,3 +143,8 @@ class Color(NamedTuple):
 
 
 ZERO_VECTOR = Vector(0, 0, 0, 0)
+BLACK = Color(0, 0, 0)
+WHITE = Color(1, 1, 1)
+RED = Color(1, 0, 0)
+GREEN = Color(0, 1, 0)
+BLUE = Color(0, 0, 1)

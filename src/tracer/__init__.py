@@ -1,11 +1,12 @@
-from .shared import *
-from .physicals import Intersection, Intersections, Ray, Sphere, Light, Material, AbstractHull, Hull, Plane
+from .cameras import Camera
 from .matrices import Matrix
 from .patterns import StripePattern
+from .physicals import Intersection, Intersections, Ray, Sphere, Light, Material, AbstractHull, Hull, Plane
 from .renderer import Canvas
-from .tuples import Vector, Color, ZERO_VECTOR
+from .shared import *
+from .tuples import *
 from .worlds import World
-from .cameras import Camera
+
 import tracer.transforms
 
 point = Vector.point

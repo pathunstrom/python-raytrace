@@ -1,7 +1,4 @@
-from tracer import Canvas, Color
-
-black = Color(0, 0, 0)
-red = Color(1, 0, 0)
+from tracer import Canvas, Color, BLACK, RED
 
 
 def test_create_canvas():
@@ -9,13 +6,13 @@ def test_create_canvas():
     assert canvas.width == 10
     assert canvas.height == 20
     for pixel in canvas:
-        assert pixel == black
+        assert pixel == BLACK
 
 
 def test_set_pixel():
     canvas = Canvas(10, 20)
-    canvas[2, 3] = red
-    assert canvas[(2, 3)] == red
+    canvas[2, 3] = RED
+    assert canvas[(2, 3)] == BLACK
 
 
 def test_save_canvas_headers(tmp_path):

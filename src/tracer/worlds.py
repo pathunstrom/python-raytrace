@@ -43,9 +43,9 @@ class World:
         return World(children, light)
 
     def shade_hit(self, computations: Computations) -> Color:
-        material = computations.hull.material
+        hull = computations.hull
         shadowed = self.is_shadowed(computations.over_point)
-        return material.lighting(
+        return hull.lighting(
             self.light,
             computations.point,
             computations.eye_vector,

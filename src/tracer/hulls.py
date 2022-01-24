@@ -49,7 +49,7 @@ class AbstractHull:
             in_shadow: bool = False
     ) -> Color:
         if self.material.pattern is not None:
-            effective_color = self.material.pattern.stripe_at_hull(self, surface_position) * light.intensity
+            effective_color = self.material.pattern.color_at_hull(self, surface_position) * light.intensity
         else:
             effective_color = self.material.color * light.intensity
 

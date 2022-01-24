@@ -30,10 +30,7 @@ class Hull(Protocol):
 
 class Pattern(Protocol):
 
-    def stripe_at(self, point: Vector) -> Color:
-        ...
-
-    def stripe_at_hull(self, object, point) -> Color:
+    def color_at_hull(self, hull: Hull, point: Vector) -> Color:
         ...
 
 
@@ -77,7 +74,7 @@ class Intersection:
 class Intersections(UserList):
     def hit(self) -> Optional[Intersection]:
         try:
-            return sorted((i for i in self if i.distance > 0) , key=lambda x: x.distance)[0]
+            return sorted((i for i in self if i.distance > 0), key=lambda x: x.distance)[0]
         except IndexError:
             return None
 

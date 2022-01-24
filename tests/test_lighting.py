@@ -77,7 +77,7 @@ def test_material_with_pattern():
             ambient=1,
             diffuse=0,
             specular=0,
-            pattern=StripePattern(WHITE, BLACK)
+            pattern=StripePattern()
         )
     )
 

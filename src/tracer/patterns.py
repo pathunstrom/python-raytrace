@@ -3,7 +3,7 @@ from math import floor
 
 from tracer.matrices import Matrix
 from tracer.tuples import Color, Vector
-from tracer.physicals import Hull
+from tracer.lighting import Hull
 
 
 @dataclass

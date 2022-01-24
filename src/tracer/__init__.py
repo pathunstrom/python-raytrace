@@ -1,7 +1,8 @@
 from .cameras import Camera
+from .hulls import AbstractHull, Plane, Sphere
 from .matrices import Matrix
 from .patterns import StripePattern
-from .physicals import Intersection, Intersections, Ray, Sphere, Light, Material, AbstractHull, Hull, Plane
+from .lighting import Intersection, Intersections, Ray, Light, Material, Hull
 from .renderer import Canvas
 from .shared import *
 from .tuples import *

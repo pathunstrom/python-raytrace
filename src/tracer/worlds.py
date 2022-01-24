@@ -1,8 +1,9 @@
 from __future__ import annotations
 from dataclasses import dataclass, field
 
+from .hulls import Sphere
 from .matrices import Matrix
-from .physicals import Light, Hull, Sphere, Material, Intersections, Computations, Ray
+from .lighting import Light, Hull, Material, Intersections, Computations, Ray
 from .tuples import Vector, Color
 
 

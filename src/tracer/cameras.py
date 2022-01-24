@@ -7,7 +7,7 @@ from multiprocessing import Pool
 from os import cpu_count
 
 from tracer.matrices import Matrix
-from tracer.physicals import Ray
+from tracer.lighting import Ray
 from tracer.renderer import Canvas
 from tracer.tuples import Vector, Color
 from tracer.worlds import World

@@ -24,6 +24,12 @@ class Hull(Protocol):
         ...
 
 
+class Pattern(Protocol):
+
+    def stripe_at(self, point: Vector) -> Color:
+        ...
+
+
 @dataclass
 class Computations:
     distance: number
@@ -94,9 +100,13 @@ class Material:
     diffuse: int | float = 0.9
     specular: int | float = 0.9
     shininess: int | float = 200.0
+    pattern: Pattern = None
 
     def lighting(self, light: Light, surface_position: Vector, eye_vector: Vector, surface_normal: Vector, in_shadow: bool = False) -> Color:
-        effective_color = self.color * light.intensity
+        if self.pattern is not None:
+            effective_color = self.pattern.stripe_at(surface_position) * light.intensity
+        else:
+            effective_color = self.color * light.intensity
         light_vector = (light.position - surface_position).normalize()
 
         ambient = effective_color * self.ambient

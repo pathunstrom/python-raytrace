@@ -8,7 +8,9 @@ from tracer import (
     Light,
     Material,
     WHITE,
-    Vector
+    BLACK,
+    Vector,
+    StripePattern,
 )
 
 
@@ -65,3 +67,20 @@ def test_material_lighting(
         light: Light, in_shadow: bool, expected_color: Color
 ):
     assert surface_material.lighting(light, surface_position, eye_vector, surface_normal, in_shadow) == expected_color
+
+
+def test_material_with_pattern():
+    material = Material(
+        ambient=1,
+        diffuse=0,
+        specular=0,
+        pattern=StripePattern(WHITE, BLACK)
+    )
+
+    eye_vector = vector(0, 0, -1)
+    normal_vector = vector(0, 0, -1)
+
+    light = Light(point(0, 0, -10), WHITE)
+
+    assert material.lighting(light, point(0.9, 0, 0), eye_vector, normal_vector, False) == WHITE
+    assert material.lighting(light, point(1.1, 0, 0), eye_vector, normal_vector, False) == BLACK

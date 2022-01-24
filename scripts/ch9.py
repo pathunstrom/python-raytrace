@@ -12,6 +12,9 @@ from tracer import (
     Sphere,
     transforms,
     World,
+    StripePattern,
+    RED,
+    BLUE,
 )
 
 wall_material = Material(color=Color(.30, .23, .05), specular=0.1)
@@ -27,7 +30,16 @@ world = World(
         *walls,
         Sphere(
             transform=transforms.translation(0, 1, 0).scale(2, 2, 2),
-            material=Material(color=Color(0.4, 0.2, 0.3), diffuse=0.8, specular=2, shininess=400)
+            material=Material(
+                color=Color(0.4, 0.2, 0.3),
+                diffuse=0.8,
+                specular=2,
+                shininess=400,
+                pattern=StripePattern(
+                    RED, BLUE,
+                    transform=transforms.rotation_z(pi / 3).scale(0.25, 0.25, 0.25)
+                )
+            )
         ),
         Sphere(
             transform=Matrix.identity.scale(0.5, 0.5, 0.5).translate(1.75, 0.5, 0.5).scale(2, 2, 2,),
@@ -42,13 +54,13 @@ world = World(
 )
 
 camera = Camera(
-    # 96, 54,
-    640, 360,
+    96, 54,
+    # 640, 360,
     pi / 2,
-    Matrix.view(point(0, 20, 0), point(0, 0, 0), vector(.5, 0, -.75))
+    Matrix.view(point(0, 2, 6), point(0, 1, 0), vector(0, 1, 0))
 )
 
 if __name__ == "__main__":
     canvas = camera.render(world)
 
-    canvas.save("ch9-3.ppm")
+    canvas.save("ch10-0.ppm")

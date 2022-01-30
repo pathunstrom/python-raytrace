@@ -36,7 +36,7 @@ world = World(
                 specular=2,
                 shininess=400,
                 pattern=StripePattern(
-                    RED, BLUE,
+                    a=RED, b=BLUE,
                     transform=transforms.rotation_z(pi / 3).scale(0.25, 0.25, 0.25)
                 )
             )

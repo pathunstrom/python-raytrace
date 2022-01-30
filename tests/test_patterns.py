@@ -2,6 +2,7 @@ from pytest import mark
 
 from tracer import (
     AbstractPattern,
+    CheckeredPattern,
     Color,
     GradientPattern,
     RingPattern,
@@ -130,4 +131,21 @@ def test_gradient(point_: Vector, color: Color):
 )
 def test_ring_pattern(input_point, expected_color):
     pattern = RingPattern(first_color=WHITE, second_color=BLACK)
+    assert pattern.color_at(input_point) == expected_color
+
+
+@mark.parametrize(
+    "input_point, expected_color",
+    [
+        [point(0, 0, 0), WHITE],
+        [point(0.99, 0, 0), WHITE],
+        [point(1.01, 0, 0), BLACK],
+        [point(0, 0.99, 0), WHITE],
+        [point(0, 1.01, 0), BLACK],
+        [point(0, 0, 0.99), WHITE],
+        [point(0, 0, 1.01), BLACK]
+    ]
+)
+def test_checker_pattern(input_point, expected_color):
+    pattern = CheckeredPattern(first_color=WHITE, second_color=BLACK)
     assert pattern.color_at(input_point) == expected_color

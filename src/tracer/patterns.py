@@ -46,3 +46,14 @@ class RingPattern(AbstractPattern):
         if floor(sqrt(point.x ** 2 + point.z ** 2)) % 2 == 0:
             return self.first_color
         return self.second_color
+
+
+@dataclass
+class CheckeredPattern(AbstractPattern):
+    first_color: Color = WHITE
+    second_color: Color = BLACK
+
+    def color_at(self, point: Vector) -> Color:
+        if sum(floor(v) for v in point[:3]) % 2 == 0:
+            return self.first_color
+        return self.second_color

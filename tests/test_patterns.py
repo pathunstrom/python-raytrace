@@ -4,6 +4,7 @@ from tracer import (
     AbstractPattern,
     Color,
     GradientPattern,
+    RingPattern,
     StripePattern,
     WHITE,
     BLACK,
@@ -116,3 +117,17 @@ def test_abstract_pattern_assign_transform():
 def test_gradient(point_: Vector, color: Color):
     pattern = GradientPattern(from_color=WHITE, to_color=BLACK)
     assert pattern.color_at(point_) == color
+
+
+@mark.parametrize(
+    "input_point, expected_color",
+    [
+        [point(0, 0, 0), WHITE],
+        [point(1, 0, 0), BLACK],
+        [point(0, 0, 1), BLACK],
+        [point(0.708, 0, 0.708), BLACK]
+    ]
+)
+def test_ring_pattern(input_point, expected_color):
+    pattern = RingPattern(first_color=WHITE, second_color=BLACK)
+    assert pattern.color_at(input_point) == expected_color

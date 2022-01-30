@@ -20,15 +20,6 @@ class AbstractPattern:
 
 
 @dataclass
-class StripePattern(AbstractPattern):
-    a: Color = WHITE
-    b: Color = BLACK
-
-    def color_at(self, point: Vector):
-        return self.a if floor(point.x % 2) == 0 else self.b
-
-
-@dataclass
 class SolidPattern(AbstractPattern):
     color: Color = WHITE
 
@@ -37,23 +28,35 @@ class SolidPattern(AbstractPattern):
 
 
 @dataclass
+class StripePattern(AbstractPattern):
+    first_pattern: AbstractPattern = SolidPattern(color=WHITE)
+    second_pattern: AbstractPattern = SolidPattern(color=BLACK)
+
+    def color_at(self, point: Vector):
+        return self.first_pattern.color_at(point) if floor(point.x % 2) == 0 else self.second_pattern.color_at(point)
+
+
+@dataclass
 class GradientPattern(AbstractPattern):
-    from_color: Color = WHITE
-    to_color: Color = BLACK
+    from_pattern: AbstractPattern = SolidPattern(color=WHITE)
+    to_pattern: AbstractPattern = SolidPattern(color=BLACK)
 
     def color_at(self, point: Vector) -> Color:
-        return self.from_color + (self.to_color - self.from_color) * (point.x - floor(point.x))
+        from_color = self.from_pattern.color_at(point)
+        to_color = self.to_pattern.color_at(point)
+        print(from_color, to_color)
+        return from_color + (to_color - from_color) * (point.x - floor(point.x))
 
 
 @dataclass
 class RingPattern(AbstractPattern):
-    first_color: Color = WHITE
-    second_color: Color = BLACK
+    first_pattern: AbstractPattern = SolidPattern(color=WHITE)
+    second_pattern: AbstractPattern = SolidPattern(color=BLACK)
 
     def color_at(self, point: Vector) -> Color:
         if floor(sqrt(point.x ** 2 + point.z ** 2)) % 2 == 0:
-            return self.first_color
-        return self.second_color
+            return self.first_pattern.color_at(point)
+        return self.second_pattern.color_at(point)
 
 
 @dataclass

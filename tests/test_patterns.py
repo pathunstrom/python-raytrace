@@ -26,8 +26,8 @@ class PatternTestable(AbstractPattern):
 
 def test_create_stripe_pattern():
     pattern = StripePattern()
-    assert pattern.a == WHITE
-    assert pattern.b == BLACK
+    assert pattern.first_pattern == SolidPattern(color=WHITE)
+    assert pattern.second_pattern == SolidPattern(color=BLACK)
 
 
 @mark.parametrize(
@@ -54,22 +54,6 @@ def test_stripe_pattern_constant_in_y(input_point):
 def test_stripe_pattern_constant_in_z(input_point):
     pattern = StripePattern()
     assert pattern.color_at(input_point) == WHITE
-
-
-@mark.parametrize(
-    "input_point, expected_color",
-    [
-        [point(0, 0, 0), WHITE],
-        [point(0.9, 0, 0), WHITE],
-        [point(1, 0, 0), BLACK],
-        [point(-0.1, 0, 0), BLACK],
-        [point(-1, 0, 0), BLACK],
-        [point(-1.1, 0, 0), WHITE]
-    ]
-)
-def test_stripe_pattern_alternates_in_x(input_point, expected_color):
-    pattern = StripePattern()
-    assert pattern.color_at(input_point) == expected_color
 
 
 def test_stripes_with_object_transform():
@@ -108,7 +92,26 @@ def test_abstract_pattern_assign_transform():
 
 
 @mark.parametrize(
-    "point_, color",
+    "input_point, expected_color",
+    [
+        [point(0, 0, 0), WHITE],
+        [point(0.9, 0, 0), WHITE],
+        [point(1, 0, 0), BLACK],
+        [point(-0.1, 0, 0), BLACK],
+        [point(-1, 0, 0), BLACK],
+        [point(-1.1, 0, 0), WHITE]
+    ]
+)
+def test_stripe_pattern_alternates_in_x(input_point, expected_color):
+    pattern = StripePattern(
+        first_pattern=SolidPattern(color=WHITE),
+        second_pattern=SolidPattern(color=BLACK)
+    )
+    assert pattern.color_at(input_point) == expected_color
+
+
+@mark.parametrize(
+    "input_point, expected_color",
     [
         [point(0, 0, 0), WHITE],
         [point(0.25, 0, 0), Color(0.75, 0.75, 0.75)],
@@ -116,9 +119,9 @@ def test_abstract_pattern_assign_transform():
         [point(0.75, 0, 0), Color(0.25, 0.25, 0.25)]
     ]
 )
-def test_gradient(point_: Vector, color: Color):
-    pattern = GradientPattern(from_color=WHITE, to_color=BLACK)
-    assert pattern.color_at(point_) == color
+def test_gradient(input_point: Vector, expected_color: Color):
+    pattern = GradientPattern(from_pattern=SolidPattern(color=WHITE), to_pattern=SolidPattern(color=BLACK))
+    assert pattern.color_at(input_point) == expected_color
 
 
 @mark.parametrize(
@@ -131,7 +134,7 @@ def test_gradient(point_: Vector, color: Color):
     ]
 )
 def test_ring_pattern(input_point, expected_color):
-    pattern = RingPattern(first_color=WHITE, second_color=BLACK)
+    pattern = RingPattern(first_pattern=SolidPattern(color=WHITE), second_pattern=SolidPattern(color=BLACK))
     assert pattern.color_at(input_point) == expected_color
 
 

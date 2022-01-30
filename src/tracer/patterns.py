@@ -29,6 +29,14 @@ class StripePattern(AbstractPattern):
 
 
 @dataclass
+class SolidPattern(AbstractPattern):
+    color: Color = WHITE
+
+    def color_at(self, point: Vector) -> Color:
+        return self.color
+
+
+@dataclass
 class GradientPattern(AbstractPattern):
     from_color: Color = WHITE
     to_color: Color = BLACK

@@ -6,6 +6,7 @@ from tracer import (
     Color,
     GradientPattern,
     RingPattern,
+    SolidPattern,
     StripePattern,
     WHITE,
     BLACK,
@@ -149,3 +150,14 @@ def test_ring_pattern(input_point, expected_color):
 def test_checker_pattern(input_point, expected_color):
     pattern = CheckeredPattern(first_color=WHITE, second_color=BLACK)
     assert pattern.color_at(input_point) == expected_color
+
+
+@mark.parametrize(
+    "input_point",
+    [
+        point(0, 1, 0), point(1, 0, 0), point(0.1, 0.1, 0.1), point(0, 0, 1), point(2, 4, 7)
+    ]
+)
+def test_solid_pattern(input_point):
+    pattern = SolidPattern(color=WHITE)
+    assert pattern.color_at(input_point) == WHITE

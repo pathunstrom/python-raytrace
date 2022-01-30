@@ -3,13 +3,15 @@ from pytest import mark
 from tracer import (
     AbstractPattern,
     Color,
+    GradientPattern,
     StripePattern,
     WHITE,
     BLACK,
     Matrix,
     point,
     Sphere,
-    transforms
+    transforms,
+    Vector
 )
 
 
@@ -100,3 +102,17 @@ def test_abstract_pattern_assign_transform():
     assert pattern.transform == Matrix.identity
     pattern.transform = transforms.rotation_z(1)
     assert pattern.transform == transforms.rotation_z(1)
+
+
+@mark.parametrize(
+    "point_, color",
+    [
+        [point(0, 0, 0), WHITE],
+        [point(0.25, 0, 0), Color(0.75, 0.75, 0.75)],
+        [point(0.5, 0, 0), Color(0.5, 0.5, 0.5)],
+        [point(0.75, 0, 0), Color(0.25, 0.25, 0.25)]
+    ]
+)
+def test_gradient(point_: Vector, color: Color):
+    pattern = GradientPattern(from_color=WHITE, to_color=BLACK)
+    assert pattern.color_at(point_) == color

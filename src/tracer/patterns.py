@@ -26,3 +26,12 @@ class StripePattern(AbstractPattern):
 
     def color_at(self, point: Vector):
         return self.a if floor(point.x % 2) == 0 else self.b
+
+
+@dataclass
+class GradientPattern(AbstractPattern):
+    from_color: Color = WHITE
+    to_color: Color = BLACK
+
+    def color_at(self, point: Vector) -> Color:
+        return self.from_color + (self.to_color - self.from_color) * (point.x - floor(point.x))

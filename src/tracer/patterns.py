@@ -15,7 +15,10 @@ class AbstractPattern:
 
     def color_at_hull(self, hull: Hull, point: Vector) -> Color:
         local_point = hull.transform.inverse() * point
-        pattern_local_point = self.transform.inverse() * local_point
+        return self.color_internal(local_point)
+
+    def color_internal(self, point: Vector):
+        pattern_local_point = self.transform.inverse() * point
         return self.color_at(pattern_local_point)
 
 
@@ -23,48 +26,66 @@ class AbstractPattern:
 class SolidPattern(AbstractPattern):
     color: Color = WHITE
 
+    def color_at_hull(self, hull: Hull, point: Vector) -> Color:
+        return self.color
+
     def color_at(self, point: Vector) -> Color:
+        return self.color
+
+    def color_internal(self, point: Vector) -> Color:
         return self.color
 
 
 @dataclass
-class StripePattern(AbstractPattern):
+class TwoPatternPattern(AbstractPattern):
     first_pattern: AbstractPattern = SolidPattern(color=WHITE)
     second_pattern: AbstractPattern = SolidPattern(color=BLACK)
 
+
+@dataclass
+class StripePattern(TwoPatternPattern):
+
     def color_at(self, point: Vector):
-        return self.first_pattern.color_at(point) if floor(point.x % 2) == 0 else self.second_pattern.color_at(point)
+        print(point)
+        if floor(point.x % 2) == 0:
+            return self.first_pattern.color_internal(point)
+        return self.second_pattern.color_internal(point)
 
 
 @dataclass
-class GradientPattern(AbstractPattern):
-    from_pattern: AbstractPattern = SolidPattern(color=WHITE)
-    to_pattern: AbstractPattern = SolidPattern(color=BLACK)
+class GradientPattern(TwoPatternPattern):
 
     def color_at(self, point: Vector) -> Color:
-        from_color = self.from_pattern.color_at(point)
-        to_color = self.to_pattern.color_at(point)
+        from_color = self.first_pattern.color_internal(point)
+        to_color = self.second_pattern.color_internal(point)
         print(from_color, to_color)
         return from_color + (to_color - from_color) * (point.x - floor(point.x))
 
 
 @dataclass
-class RingPattern(AbstractPattern):
-    first_pattern: AbstractPattern = SolidPattern(color=WHITE)
-    second_pattern: AbstractPattern = SolidPattern(color=BLACK)
+class RingPattern(TwoPatternPattern):
 
     def color_at(self, point: Vector) -> Color:
         if floor(sqrt(point.x ** 2 + point.z ** 2)) % 2 == 0:
-            return self.first_pattern.color_at(point)
-        return self.second_pattern.color_at(point)
+            return self.first_pattern.color_internal(point)
+        return self.second_pattern.color_internal(point)
 
 
 @dataclass
-class CheckeredPattern(AbstractPattern):
-    first_color: Color = WHITE
-    second_color: Color = BLACK
+class CheckeredPattern(TwoPatternPattern):
 
     def color_at(self, point: Vector) -> Color:
+        print(point, sum(floor(v) for v in point[:3]) % 2)
         if sum(floor(v) for v in point[:3]) % 2 == 0:
-            return self.first_color
-        return self.second_color
+            return self.first_pattern.color_internal(point)
+        return self.second_pattern.color_internal(point)
+
+
+@dataclass
+class RadialGradientPattern(TwoPatternPattern):
+
+    def color_at(self, point: Vector) -> Color:
+        from_color = self.first_pattern.color_internal(point)
+        to_color = self.second_pattern.color_internal(point)
+        distance = sqrt(point.x ** 2 + point.z ** 2)
+        return from_color + (to_color - from_color) * (distance - floor(distance))

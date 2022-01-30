@@ -5,6 +5,7 @@ from tracer import (
     CheckeredPattern,
     Color,
     GradientPattern,
+    RadialGradientPattern,
     RingPattern,
     SolidPattern,
     StripePattern,
@@ -120,7 +121,7 @@ def test_stripe_pattern_alternates_in_x(input_point, expected_color):
     ]
 )
 def test_gradient(input_point: Vector, expected_color: Color):
-    pattern = GradientPattern(from_pattern=SolidPattern(color=WHITE), to_pattern=SolidPattern(color=BLACK))
+    pattern = GradientPattern(first_pattern=SolidPattern(color=WHITE), second_pattern=SolidPattern(color=BLACK))
     assert pattern.color_at(input_point) == expected_color
 
 
@@ -151,7 +152,7 @@ def test_ring_pattern(input_point, expected_color):
     ]
 )
 def test_checker_pattern(input_point, expected_color):
-    pattern = CheckeredPattern(first_color=WHITE, second_color=BLACK)
+    pattern = CheckeredPattern(first_pattern=SolidPattern(color=WHITE), second_pattern=SolidPattern(color=BLACK))
     assert pattern.color_at(input_point) == expected_color
 
 
@@ -164,3 +165,17 @@ def test_checker_pattern(input_point, expected_color):
 def test_solid_pattern(input_point):
     pattern = SolidPattern(color=WHITE)
     assert pattern.color_at(input_point) == WHITE
+
+
+@mark.parametrize(
+    "input_point, expected_color",
+    [
+        [point(0, 0, 0), WHITE],
+        [point(0.5, 0, 0), Color(0.5, 0.5, 0.5)],
+        [point(0, 0, 0.5), Color(0.5, 0.5, 0.5)],
+        [point(0.25, 0, 0.25), Color(0.64644, 0.64644, 0.64644)]
+    ]
+)
+def test_radial_gradient_pattern(input_point: Vector, expected_color: Color):
+    pattern = RadialGradientPattern(first_pattern=SolidPattern(color=WHITE), second_pattern=SolidPattern(color=BLACK))
+    assert pattern.color_at(input_point) == expected_color

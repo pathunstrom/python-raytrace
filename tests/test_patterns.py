@@ -2,11 +2,15 @@ from pytest import mark
 
 from tracer import (
     AbstractPattern,
+    AddBlendPattern,
+    AverageBlendPattern,
     CheckeredPattern,
     Color,
     GradientPattern,
+    MultiplyBlendPattern,
     RadialGradientPattern,
     RingPattern,
+    ScreenBlendPattern,
     SolidPattern,
     StripePattern,
     WHITE,
@@ -179,3 +183,35 @@ def test_solid_pattern(input_point):
 def test_radial_gradient_pattern(input_point: Vector, expected_color: Color):
     pattern = RadialGradientPattern(first_pattern=SolidPattern(color=WHITE), second_pattern=SolidPattern(color=BLACK))
     assert pattern.color_at(input_point) == expected_color
+
+
+def test_add_pattern():
+    pattern = AddBlendPattern(
+        first_pattern=SolidPattern(color=Color(0.25, 0.25, 0.25)),
+        second_pattern=SolidPattern(color=Color(0.25, 0.25, 0.25))
+    )
+    assert pattern.color_at(point(0, 0, 0)) == Color(0.5, 0.5, 0.5)
+
+
+def test_multiply_blend_pattern():
+    pattern = MultiplyBlendPattern(
+        first_pattern=SolidPattern(color=Color(0.5, 0.5, 0.5)),
+        second_pattern=SolidPattern(color=Color(0.5, 0.5, 0.5))
+    )
+    assert pattern.color_at(point(0, 0, 0)) == Color(0.25, 0.25, 0.25)
+
+
+def test_screen_blend_pattern():
+    pattern = ScreenBlendPattern(
+        first_pattern=SolidPattern(color=Color(0.7, 0.7, 0.7)),
+        second_pattern=SolidPattern(color=Color(0.4, 0.4, 0.4))
+    )
+    assert pattern.color_at(point(0, 0, 0)) == Color(0.82, 0.82, 0.82)
+
+
+def test_average_blend_pattern():
+    pattern = AverageBlendPattern(
+        first_pattern=SolidPattern(color=Color(0.4, 0.4, 0.4)),
+        second_pattern=SolidPattern(color=Color(0.2, 0.2, 0.2))
+    )
+    assert pattern.color_at(point(0, 0, 0)) == Color(0.3, 0.3, 0.3)

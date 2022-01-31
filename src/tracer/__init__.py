@@ -3,10 +3,14 @@ from .hulls import AbstractHull, Plane, Sphere
 from .matrices import Matrix
 from .patterns import (
     AbstractPattern,
+    AddBlendPattern,
+    AverageBlendPattern,
     CheckeredPattern,
     GradientPattern,
+    MultiplyBlendPattern,
     RadialGradientPattern,
     RingPattern,
+    ScreenBlendPattern,
     SolidPattern,
     StripePattern
 )
